@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface OwnerRatingRepository extends JpaRepository<OwnerRating, Long> {
+public interface OwnerRatingRepository {
     public OwnerRating findOne(Long id);
     public OwnerRating findOneByOwnerId(Long ownerId);
     public OwnerRating findOneByGuestId(Long guestId);

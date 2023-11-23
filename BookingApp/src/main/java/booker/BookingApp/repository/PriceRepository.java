@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface PriceRepository extends JpaRepository<Price, Long> {
+public interface PriceRepository {
 
     public List<Price> findAll();
     public Price findOne(Long id);

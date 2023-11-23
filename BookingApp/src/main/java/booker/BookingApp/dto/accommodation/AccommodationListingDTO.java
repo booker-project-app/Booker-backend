@@ -12,8 +12,8 @@ public @Data class AccommodationListingDTO {
     private String description;
     private Image image;
     private AccommodationRating rating;
-    private int totalPrice;
-    private int pricePerDay;
+    private double totalPrice;
+    private double pricePerDay;
 
     public AccommodationListingDTO makeFromAccommodation(Accommodation accommodation) {
         AccommodationListingDTO listingDTO = new AccommodationListingDTO();

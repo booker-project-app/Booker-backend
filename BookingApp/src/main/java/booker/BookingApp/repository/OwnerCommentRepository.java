@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface OwnerCommentRepository extends JpaRepository<OwnerComment, Long> {
+public interface OwnerCommentRepository {
     public OwnerComment findOne(Long id);
     public OwnerComment findOneByOwnerId(Long ownerId);
     public OwnerComment findOneByGuestId(Long guestId);

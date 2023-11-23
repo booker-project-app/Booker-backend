@@ -1,4 +1,4 @@
-package booker.BookingApp.controller;
+/*package booker.BookingApp.controller;
 
 import booker.BookingApp.dto.UserDTO;
 import booker.BookingApp.model.User;
@@ -93,4 +93,4 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-}
+}*/

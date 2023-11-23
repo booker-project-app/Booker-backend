@@ -1,4 +1,4 @@
-package booker.BookingApp.controller;
+/*package booker.BookingApp.controller;
 
 import booker.BookingApp.dto.accommodation.AccommodationRatingDTO;
 import booker.BookingApp.model.accommodation.AccommodationRating;
@@ -96,4 +96,4 @@ public class AccommodationRatingController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-}
+}*/

@@ -1,4 +1,4 @@
-package booker.BookingApp.service.implementation;
+/*package booker.BookingApp.service.implementation;
 
 import booker.BookingApp.model.OwnerRating;
 import booker.BookingApp.repository.OwnerRatingRepository;
@@ -77,4 +77,4 @@ public class OwnerRatingService {
     public OwnerRating save(OwnerRating ownerRating) {
         return ownerRatingRepository.save(ownerRating);
     }
-}
+}*/

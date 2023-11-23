@@ -11,8 +11,8 @@ public @Data class FavouriteAccommodationDTO {
     private String title;
     private String description;
     private Image image;
-    private int totalPrice;
-    private int pricePerDay;
+    private double totalPrice;
+    private double pricePerDay;
     private AccommodationRating rating;
     private String address;
 

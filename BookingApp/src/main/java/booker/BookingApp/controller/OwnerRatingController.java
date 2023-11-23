@@ -1,4 +1,4 @@
-package booker.BookingApp.controller;
+/*package booker.BookingApp.controller;
 
 import booker.BookingApp.dto.OwnerRatingDTO;
 import booker.BookingApp.model.OwnerRating;
@@ -115,4 +115,4 @@ public class OwnerRatingController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-}
+}*/

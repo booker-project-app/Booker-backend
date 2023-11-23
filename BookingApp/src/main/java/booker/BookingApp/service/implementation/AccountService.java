@@ -1,4 +1,4 @@
-package booker.BookingApp.service.implementation;
+/*package booker.BookingApp.service.implementation;
 
 import booker.BookingApp.model.Account;
 import booker.BookingApp.repository.AccountRepository;
@@ -45,4 +45,4 @@ public class AccountService {
     public Account save(Account account) {
         return accountRepository.save(account);
     }
-}
+}*/

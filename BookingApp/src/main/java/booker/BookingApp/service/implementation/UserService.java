@@ -1,4 +1,4 @@
-package booker.BookingApp.service.implementation;
+/*package booker.BookingApp.service.implementation;
 
 import booker.BookingApp.model.User;
 import booker.BookingApp.repository.UserRepository;
@@ -48,4 +48,4 @@ public class UserService {
         return userRepository.save(user);
     }
 
-}
+}*/

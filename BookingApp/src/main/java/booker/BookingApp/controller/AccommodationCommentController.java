@@ -1,4 +1,4 @@
-package booker.BookingApp.controller;
+/*package booker.BookingApp.controller;
 
 import booker.BookingApp.dto.accommodation.AccommodationCommentDTO;
 import booker.BookingApp.model.accommodation.AccommodationComment;
@@ -94,4 +94,4 @@ public class AccommodationCommentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-}
+}*/

@@ -1,4 +1,4 @@
-package booker.BookingApp.controller;
+/*package booker.BookingApp.controller;
 
 import booker.BookingApp.dto.PriceDTO;
 import booker.BookingApp.model.accommodation.Price;
@@ -83,4 +83,4 @@ public class PriceController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-}
+}*/

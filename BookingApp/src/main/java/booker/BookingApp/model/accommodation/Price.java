@@ -13,4 +13,5 @@ public @Data class Price {
     private Date fromDate;
     private Date toDate;
     private PriceType type;
+
 }

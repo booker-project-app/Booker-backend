@@ -1,4 +1,4 @@
-package booker.BookingApp.service.implementation;
+/*package booker.BookingApp.service.implementation;
 
 import booker.BookingApp.model.OwnerComment;
 import booker.BookingApp.repository.OwnerCommentRepository;
@@ -64,4 +64,4 @@ public class OwnerCommentService {
     public OwnerComment save(OwnerComment ownerComment) {
         return ownerCommentRepository.save(ownerComment);
     }
-}
+}*/

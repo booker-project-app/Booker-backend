@@ -1,4 +1,4 @@
-package booker.BookingApp.service.implementation;
+/*package booker.BookingApp.service.implementation;
 
 
 import booker.BookingApp.model.accommodation.Price;
@@ -39,4 +39,4 @@ public class PriceService {
     public Price save(Price price) {
         return priceRepository.save(price);
     }
-}
+}*/

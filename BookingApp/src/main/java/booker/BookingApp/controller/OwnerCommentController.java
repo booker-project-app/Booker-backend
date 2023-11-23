@@ -1,4 +1,4 @@
-package booker.BookingApp.controller;
+/*package booker.BookingApp.controller;
 
 import booker.BookingApp.dto.OwnerCommentDTO;
 import booker.BookingApp.model.OwnerComment;
@@ -115,4 +115,4 @@ public class OwnerCommentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-}
+}*/
