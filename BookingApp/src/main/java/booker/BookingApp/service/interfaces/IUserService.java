@@ -13,4 +13,3 @@ public interface IUserService {
     public User findByEmailAndPassword(String email, String password);
     public List<User> findAllBlocked();
     public List<User> findAllDeleted();
-}

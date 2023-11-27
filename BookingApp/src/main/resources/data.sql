@@ -24,7 +24,11 @@ INSERT INTO Accommodation_Rating (accommodation_id, guest_id, rate, date, report
 VALUES
     (1, 3, 5.0, '2023-10-03', false),
     (2, 1, 4.5, '2023-09-25', false),
-    (3, 2, 3.8, '2023-10-05', false);
+    (3, 2, 3.8, '2023-10-05', true);
+
+
+
+
 
 
 

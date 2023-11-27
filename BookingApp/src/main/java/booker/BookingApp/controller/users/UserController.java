@@ -67,7 +67,6 @@ public class UserController {
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
         user.setName(updateUserDTO.getName());
         user.setSurname(updateUserDTO.getSurname());
         user.setEmail(updateUserDTO.getEmail());
@@ -77,6 +76,7 @@ public class UserController {
         user.setRole(updateUserDTO.getRole());
         user.setBlocked(updateUserDTO.isBlocked());
         user.setDeleted(updateUserDTO.isDeleted());
+
 
         user = userService.save(user);
         return new ResponseEntity<>(new UpdateUserDTO(user), HttpStatus.OK);

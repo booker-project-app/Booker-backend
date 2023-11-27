@@ -17,6 +17,7 @@ public class AccommodationCommentController {
     @Autowired
     private AccommodationCommentService accommodationCommentService;
 
+
     @GetMapping(value = "/all")
     public ResponseEntity<List<AccommodationCommentDTO>> getAllComments() {
         List<AccommodationComment> comments = accommodationCommentService.findAll();
@@ -28,15 +29,14 @@ public class AccommodationCommentController {
         return new ResponseEntity<>(commentDTOS, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/all/{accommodation_id}")
+    @GetMapping(value = "/all/{accommodation_id}/comments")
     public ResponseEntity<List<AccommodationCommentDTO>> getAllAccommodationComments(@PathVariable Long accommodation_id) {
-        List<AccommodationComment> comments = accommodationCommentService.findAll();
+        List<AccommodationComment> comments = accommodationCommentService.findAllForAccommodation(accommodation_id);
 
         List<AccommodationCommentDTO> commentDTOS = new ArrayList<>();
         for (AccommodationComment comment : comments) {
-            //if (comment.getAccommodationId() == accommodation_id) {
-                //commentDTOS.add(new AccommodationCommentDTO(comment));
-            //}
+            commentDTOS.add(new AccommodationCommentDTO(comment));
+
         }
         return new ResponseEntity<>(commentDTOS, HttpStatus.OK);
     }
@@ -55,8 +55,8 @@ public class AccommodationCommentController {
     public ResponseEntity<AccommodationCommentDTO> saveAccommodationComment(@RequestBody AccommodationCommentDTO accommodationCommentDTO) {
         AccommodationComment accommodationComment = new AccommodationComment();
 
-        //accommodationComment.setAccommodationId(accommodationCommentDTO.getAccommodationId());
-       // accommodationComment.setGuestId(accommodationCommentDTO.getGuestId());
+        //accommodationComment.setAccommodation();
+        //accommodationComment.setGuestId(accommodationCommentDTO.getGuestId());
         accommodationComment.setContent(accommodationCommentDTO.getContent());
         accommodationComment.setDate(accommodationCommentDTO.getDate());
         accommodationComment.setReported(accommodationCommentDTO.isReported());
@@ -93,5 +93,17 @@ public class AccommodationCommentController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping(value = "/all/reported")
+    public ResponseEntity<List<AccommodationCommentDTO>> findAllReported() {
+        List<AccommodationComment> reportedComments = accommodationCommentService.findAllReported();
+        List<AccommodationCommentDTO> reportedCommentsDTO = new ArrayList<>();
+
+        for(AccommodationComment accommodationComment :reportedComments) {
+            reportedCommentsDTO.add(new AccommodationCommentDTO(accommodationComment));
+        }
+
+        return new ResponseEntity<>(reportedCommentsDTO, HttpStatus.OK);
     }
 }

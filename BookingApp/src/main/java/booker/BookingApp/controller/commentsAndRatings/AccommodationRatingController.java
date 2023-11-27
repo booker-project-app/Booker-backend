@@ -29,15 +29,13 @@ public class AccommodationRatingController {
         return new ResponseEntity<>(ratingDTOS, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/all/{accommodation_id}")
+    @GetMapping(value = "/all/{accommodation_id}/ratings")
     public ResponseEntity<List<AccommodationRatingDTO>> findAllForAccommodation(@PathVariable Long accommodation_id) {
-        List<AccommodationRating> ratings = accommodationRatingService.findAll();
+        List<AccommodationRating> ratings = accommodationRatingService.findAllForAccommodation(accommodation_id);
         List<AccommodationRatingDTO> ratingDTOS = new ArrayList<>();
 
         for (AccommodationRating accommodationRating : ratings) {
-            //if (accommodationRating.getAccommodationId()  == accommodation_id) {
-                //ratingDTOS.add(new AccommodationRatingDTO(accommodationRating));
-            //}
+            ratingDTOS.add(new AccommodationRatingDTO(accommodationRating));
         }
         return new ResponseEntity<>(ratingDTOS, HttpStatus.OK);
     }
@@ -57,7 +55,7 @@ public class AccommodationRatingController {
     public ResponseEntity<AccommodationRatingDTO> saveAccommodationRating(@RequestBody AccommodationRatingDTO accommodationRatingDTO) {
         AccommodationRating accommodationRating = new AccommodationRating();
 
-        //accommodationRating.setAccommodationId(accommodationRatingDTO.getAccommodationId());
+        //accommodationRating.setAccommodation();
         //accommodationRating.setGuestId(accommodationRatingDTO.getGuestId());
         accommodationRating.setRate(accommodationRatingDTO.getRate());
         accommodationRating.setDate(accommodationRatingDTO.getDate());
@@ -95,5 +93,16 @@ public class AccommodationRatingController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping(value = "/all/reported")
+    public ResponseEntity<List<AccommodationRatingDTO>> findAllReported() {
+        List<AccommodationRating> reported = accommodationRatingService.findAllReported();
+        List<AccommodationRatingDTO> reportedDTOS = new ArrayList<>();
+        for (AccommodationRating accommodationRating : reported) {
+            reportedDTOS.add(new AccommodationRatingDTO(accommodationRating));
+        }
+
+        return new ResponseEntity<>(reportedDTOS, HttpStatus.OK);
     }
 }

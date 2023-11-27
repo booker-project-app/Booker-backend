@@ -42,11 +42,8 @@ public class OwnerCommentController {
 
 
 
-
-
-
     @PostMapping(consumes = "application/json")
-    public ResponseEntity<OwnerCommentDTO> saveUser(@RequestBody OwnerCommentDTO ownerCommentDTO) {
+    public ResponseEntity<OwnerCommentDTO> saveOwnerComment(@RequestBody OwnerCommentDTO ownerCommentDTO) {
         OwnerComment ownerComment = new OwnerComment();
 
         //ownerComment.setOwnerId(ownerCommentDTO.getOwnerId());
@@ -60,7 +57,7 @@ public class OwnerCommentController {
     }
 
     @PutMapping(consumes = "application/json")
-    public ResponseEntity<OwnerCommentDTO> updateUser(@RequestBody OwnerCommentDTO ownerCommentDTO) {
+    public ResponseEntity<OwnerCommentDTO> updateOwnerComment(@RequestBody OwnerCommentDTO ownerCommentDTO) {
         OwnerComment ownerComment = ownerCommentService.findOne(ownerCommentDTO.getId());
 
         if (ownerComment == null) {
@@ -87,5 +84,17 @@ public class OwnerCommentController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping(value = "/all/{owner_id}/comments")
+    public ResponseEntity<List<OwnerCommentDTO>> getAllForOwner(@PathVariable Long owner_id) {
+        List<OwnerComment> comments = ownerCommentService.findAllForOwner(owner_id);
+        List<OwnerCommentDTO> commentDTOS = new ArrayList<>();
+
+        for(OwnerComment ownerComment : comments) {
+            commentDTOS.add(new OwnerCommentDTO(ownerComment));
+        }
+
+        return new ResponseEntity<>(commentDTOS, HttpStatus.OK);
     }
 }
