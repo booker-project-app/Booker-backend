@@ -11,5 +11,4 @@ public interface IUserService {
     public User save(User user);
     public User findByEmail(String email);
     public User findByEmailAndPassword(String email, String password);
-    public List<User> findAllBlocked();
 }

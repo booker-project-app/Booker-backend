@@ -12,6 +12,7 @@ public @Data class UserDTO {
     private String surname;
 
     private String email;
+    private String password;
 
     private String address;
 
@@ -19,6 +20,7 @@ public @Data class UserDTO {
     private Role role;
     private boolean blocked;
     private boolean deleted;
+
 
     public UserDTO() {
     }

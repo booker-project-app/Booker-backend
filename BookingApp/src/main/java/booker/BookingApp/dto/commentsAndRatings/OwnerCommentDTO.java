@@ -7,8 +7,8 @@ import java.util.Date;
 
 public @Data class OwnerCommentDTO {
     private Long id;
-    //private Long ownerId;
-    //private Long guestId;
+    private Long ownerId;
+    private Long guestId;
     private String content;
     private Date date;
     private boolean reported;
@@ -17,11 +17,13 @@ public @Data class OwnerCommentDTO {
     }
 
     public OwnerCommentDTO(OwnerComment ownerComment) {
-        this(ownerComment.getId(), ownerComment.getContent(), ownerComment.getDate(), ownerComment.isReported());
+        this(ownerComment.getId(), ownerComment.getOwner().getId(), ownerComment.getGuest().getId(), ownerComment.getContent(), ownerComment.getDate(), ownerComment.isReported());
     }
 
-    public OwnerCommentDTO(Long id, String content, Date date, boolean reported) {
+    public OwnerCommentDTO(Long id, Long ownerId, Long guestId, String content, Date date, boolean reported) {
         this.id = id;
+        this.ownerId = ownerId;
+        this.guestId = guestId;
         this.content = content;
         this.date = date;
         this.reported = reported;

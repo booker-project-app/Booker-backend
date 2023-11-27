@@ -5,14 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public @Data @AllArgsConstructor class Accommodation {
+public @Data @AllArgsConstructor @NoArgsConstructor class Accommodation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,11 +32,8 @@ public @Data @AllArgsConstructor class Accommodation {
     @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ArrayList<AccommodationRating> ratings;
     @OneToMany(mappedBy = "accommodation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private ArrayList<AccommodationComment> comments;
+    private List<AccommodationComment> comments;
     @Column(name = "deadline", nullable = false)
     private int deadline;
 
-    public Accommodation(){
-
-    }
 }

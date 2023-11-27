@@ -3,7 +3,6 @@ package booker.BookingApp.controller.accommodation;
 import booker.BookingApp.dto.accommodation.AmenityDTO;
 import booker.BookingApp.model.accommodation.Filter;
 import booker.BookingApp.service.implementation.AccommodationService;
-import booker.BookingApp.service.implementation.AmenityService;
 import booker.BookingApp.service.interfaces.IAccommodationService;
 import booker.BookingApp.service.interfaces.IAmenityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
