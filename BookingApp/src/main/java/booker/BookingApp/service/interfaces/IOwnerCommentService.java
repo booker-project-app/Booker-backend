@@ -1,6 +1,6 @@
 package booker.BookingApp.service.interfaces;
 
-import booker.BookingApp.model.OwnerComment;
+import booker.BookingApp.model.commentsAndRatings.OwnerComment;
 
 import java.util.List;
 
