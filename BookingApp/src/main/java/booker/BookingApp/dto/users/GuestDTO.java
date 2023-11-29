@@ -4,12 +4,14 @@ import booker.BookingApp.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class GuestDTO extends UserDTO{
     private boolean blocked;
     private ArrayList<Long> favouriteAccommodations;

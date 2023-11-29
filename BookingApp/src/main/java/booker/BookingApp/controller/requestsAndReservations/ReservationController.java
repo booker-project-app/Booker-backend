@@ -71,11 +71,11 @@ public class ReservationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping(value = "/owner/{ownerId}/accept/{id}/{accept}")
+    @PutMapping(value = "/owner/{ownerId}/accept/{id}/{accept}")
     public ResponseEntity<Void> declineAccommodation(@PathVariable Long ownerId,
                                                      @PathVariable Long id,
                                                      @PathVariable boolean accept) {
         reservationService.acceptOrDecline(ownerId, id, accept);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

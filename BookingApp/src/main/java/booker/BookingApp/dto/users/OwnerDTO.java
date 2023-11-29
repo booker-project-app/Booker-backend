@@ -6,12 +6,14 @@ import booker.BookingApp.model.commentsAndRatings.OwnerRating;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class OwnerDTO extends UserDTO {
     private ArrayList<OwnerRating> ratings;
     private ArrayList<OwnerComment> comments;
