@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class AccommodationService implements IAccommodationService {
@@ -142,6 +143,7 @@ public class AccommodationService implements IAccommodationService {
         ArrayList<Price> prices = new ArrayList<Price>();
         prices.add(price);
         accommodation.setPrices(prices);
+
 
         repository.save(accommodation);
 

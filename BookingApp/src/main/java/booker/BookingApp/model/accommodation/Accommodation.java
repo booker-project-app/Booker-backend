@@ -1,5 +1,6 @@
 package booker.BookingApp.model.accommodation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,20 +24,26 @@ public @Data @AllArgsConstructor @NoArgsConstructor class Accommodation {
     @Column(name = "address", nullable = false)
     private String address;
     @OneToMany(mappedBy = "accommodation")
-    @Column(name = "amenitites", nullable = false)
+    @JsonIgnore
+//    @Column(name = "amenities", nullable = false)
     private List<Amenity> amenities;
     @OneToMany(mappedBy = "accommodation")
+    @JsonIgnore
     @Column(name = "images", nullable = false)
     private List<Image> images;
     @OneToMany(mappedBy = "accommodation")
+    @JsonIgnore
     @Column(name = "availabilities", nullable = false)
     private List<Availability> availabilities;
 
     @OneToMany(mappedBy = "accommodation", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Price> prices;
     @OneToMany(mappedBy = "accommodation", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<AccommodationRating> ratings;
     @OneToMany(mappedBy = "accommodation", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<AccommodationComment> comments;
     @Column(name = "deadline")
     private int deadline;
