@@ -1,24 +1,39 @@
 package booker.BookingApp.service.implementation;
 
+import booker.BookingApp.dto.accommodation.AccommodationViewDTO;
+import booker.BookingApp.dto.users.UserDTO;
+import booker.BookingApp.model.accommodation.Accommodation;
+import booker.BookingApp.model.accommodation.Image;
+import booker.BookingApp.model.users.ProfilePicture;
 import booker.BookingApp.model.users.User;
 //import booker.BookingApp.repository.UserRepository;
+import booker.BookingApp.repository.ProfilePictureRepository;
 import booker.BookingApp.repository.UserRepository;
 import booker.BookingApp.service.interfaces.IUserService;
+import booker.BookingApp.util.ImageUploadUtil;
 import booker.BookingApp.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserService implements IUserService {
+
+    @Value("../../Booker-frontend/booker/src/assets/images")
+    private String imagesDirPathFront;
+
+    @Value("../../../../../res/drawable")
+    private String imagesDirPathMobile;
 
     @Autowired
     private UserRepository userRepository;
@@ -28,6 +43,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private ProfilePictureRepository profilePictureRepository;
 
     @Override
     public User findOne(Long id){
@@ -75,6 +93,22 @@ public class UserService implements IUserService {
         user.setActivationTimestamp(new Date());
         userRepository.save(user);
         return user;
+    }
+
+    @Override
+    public void uploadImage(Long userId, MultipartFile image) throws IOException {
+        User user = findOne(userId);
+        String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+        // save to frontend folder
+        ImageUploadUtil.saveImage(imagesDirPathFront, fileName, image);
+        // save to mobile app folder
+        ImageUploadUtil.saveImage(imagesDirPathMobile, fileName, image);
+        ProfilePicture profilePicture = new ProfilePicture();
+        profilePicture.setPath("../../assets/images/" + fileName);
+        profilePicture.setPath_mobile("../../../../../res/drawable/" + fileName);
+        Optional<User> u = userRepository.findById(userId);
+        profilePicture.setUser(u.get());
+        profilePictureRepository.save(profilePicture);
     }
 
 

@@ -15,8 +15,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -138,6 +141,20 @@ public class UserController {
 
         UserDTO dto = new UserDTO(user);
         return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/{userId}/upload_images")
+    public ResponseEntity<String> uploadImages(@PathVariable("userId")Long userId,
+                                               @RequestParam("images") Collection<MultipartFile> imageFiles) throws IOException {
+        if (imageFiles.size() != 1){
+            return new ResponseEntity<>("Error! You can not upload more than one image.", HttpStatus.BAD_REQUEST);
+        }
+        else{
+            for(MultipartFile image : imageFiles) {
+                userService.uploadImage(userId, image);
+            }
+            return new ResponseEntity<>("Image updated successfully!", HttpStatus.OK);
+        }
     }
 
 

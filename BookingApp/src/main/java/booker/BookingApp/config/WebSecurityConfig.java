@@ -175,6 +175,7 @@ public class WebSecurityConfig {
                             auth.requestMatchers(antMatcher("/api/owner_ratings/*/ratings")).permitAll();
                             auth.requestMatchers(antMatcher("/api/owner_ratings/all/reported")).hasAuthority("ADMIN");
                             auth.requestMatchers(antMatcher("/api/owner_ratings/report/*")).hasAuthority("OWNER");
+                            auth.requestMatchers(antMatcher("/api/users/{userId}/upload_images")).permitAll();
                             auth.requestMatchers(antMatcher("/h2-console/**")).permitAll();     //for everyone
 
 
@@ -199,6 +200,7 @@ public class WebSecurityConfig {
                         antMatcher(HttpMethod.POST, "/api/users/signup"),
                         antMatcher(HttpMethod.POST, "/api/users/login"),
                         antMatcher(HttpMethod.PUT, "api/users/activate_profile/**"),
+                        antMatcher(HttpMethod.POST, "/api/users/{userId}/upload_images"),
                         antMatcher(HttpMethod.PUT, "/api/accommodations"),
                         antMatcher(HttpMethod.PUT, "/api/accommodations/**"),
                         antMatcher(HttpMethod.GET, "/api/accommodations/**"),

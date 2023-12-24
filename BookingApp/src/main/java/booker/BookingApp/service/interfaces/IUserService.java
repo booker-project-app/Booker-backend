@@ -1,7 +1,9 @@
 package booker.BookingApp.service.interfaces;
 
 import booker.BookingApp.model.users.User;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface IUserService {
@@ -11,4 +13,5 @@ public interface IUserService {
     public User findByEmail(String email);
     public User findByEmailAndPassword(String email, String password);
     public User activateProfile(String activationLink);
+    void uploadImage(Long userId, MultipartFile image) throws IOException;
 }
