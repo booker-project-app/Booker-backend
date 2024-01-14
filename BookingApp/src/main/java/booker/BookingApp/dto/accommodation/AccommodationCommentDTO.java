@@ -18,15 +18,16 @@ public @Data class AccommodationCommentDTO {
     private Date date;
     private boolean reported;
     private boolean deleted;
+    private boolean approved;
 
     public AccommodationCommentDTO() {
     }
 
     public AccommodationCommentDTO(AccommodationComment accommodationComment) {
-        this(accommodationComment.getId(), accommodationComment.getAccommodation().getId(), accommodationComment.getUser().getId(), accommodationComment.getUser().getName(), accommodationComment.getUser().getSurname(), accommodationComment.getUser().getProfilePicture(), accommodationComment.getContent(), accommodationComment.getRating(), accommodationComment.getDate(), accommodationComment.isReported(), accommodationComment.isDeleted());
+        this(accommodationComment.getId(), accommodationComment.getAccommodation().getId(), accommodationComment.getUser().getId(), accommodationComment.getUser().getName(), accommodationComment.getUser().getSurname(), accommodationComment.getUser().getProfilePicture(), accommodationComment.getContent(), accommodationComment.getRating(), accommodationComment.getDate(), accommodationComment.isReported(), accommodationComment.isDeleted(), accommodationComment.isApproved());
     }
 
-    public AccommodationCommentDTO(Long id, Long accommodationId, Long guestId, String guestName, String guestSurname, ProfilePicture guestProfilePicture, String content, double rating, Date date, boolean reported, boolean deleted) {
+    public AccommodationCommentDTO(Long id, Long accommodationId, Long guestId, String guestName, String guestSurname, ProfilePicture guestProfilePicture, String content, double rating, Date date, boolean reported, boolean deleted, boolean approved) {
         this.id = id;
         this.accommodationId = accommodationId;
         this.guestId = guestId;
@@ -38,6 +39,7 @@ public @Data class AccommodationCommentDTO {
         this.date = date;
         this.reported = reported;
         this.deleted = deleted;
+        this.approved = approved;
     }
 
     public static AccommodationCommentDTO createFromAccommodationComment(AccommodationComment accommodationComment) {
@@ -51,6 +53,7 @@ public @Data class AccommodationCommentDTO {
                                             accommodationComment.getRating(),
                                             accommodationComment.getDate(),
                                             accommodationComment.isReported(),
-                                            accommodationComment.isDeleted());
+                                            accommodationComment.isDeleted(),
+                                            accommodationComment.isApproved());
     }
 }

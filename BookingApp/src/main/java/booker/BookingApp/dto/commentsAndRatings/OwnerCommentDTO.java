@@ -18,15 +18,16 @@ public @Data class OwnerCommentDTO {
     private Date date;
     private boolean reported;
     private boolean deleted;
+    private boolean approved;
 
     public OwnerCommentDTO() {
     }
 
     public OwnerCommentDTO(OwnerComment ownerComment) {
-        this(ownerComment.getId(), ownerComment.getOwner().getId(), ownerComment.getGuest().getId(), ownerComment.getGuest().getName(), ownerComment.getGuest().getSurname(), ownerComment.getGuest().getProfilePicture() ,ownerComment.getContent(), ownerComment.getRating(),ownerComment.getDate(), ownerComment.isReported(), ownerComment.isDeleted());
+        this(ownerComment.getId(), ownerComment.getOwner().getId(), ownerComment.getGuest().getId(), ownerComment.getGuest().getName(), ownerComment.getGuest().getSurname(), ownerComment.getGuest().getProfilePicture() ,ownerComment.getContent(), ownerComment.getRating(),ownerComment.getDate(), ownerComment.isReported(), ownerComment.isDeleted(), ownerComment.isApproved());
     }
 
-    public OwnerCommentDTO(Long id, Long ownerId, Long guestId, String guestName, String guestSurname, ProfilePicture guestProfilePicture,String content, double rating,Date date, boolean reported, boolean deleted) {
+    public OwnerCommentDTO(Long id, Long ownerId, Long guestId, String guestName, String guestSurname, ProfilePicture guestProfilePicture,String content, double rating,Date date, boolean reported, boolean deleted, boolean approved) {
         this.id = id;
         this.ownerId = ownerId;
         this.guestId = guestId;
@@ -38,6 +39,7 @@ public @Data class OwnerCommentDTO {
         this.date = date;
         this.reported = reported;
         this.deleted = deleted;
+        this.approved = approved;
     }
 
     public static OwnerCommentDTO createFromOwnerComment(OwnerComment ownerComment) {
@@ -51,6 +53,7 @@ public @Data class OwnerCommentDTO {
                 ownerComment.getRating(),
                 ownerComment.getDate(),
                 ownerComment.isReported(),
-                ownerComment.isDeleted());
+                ownerComment.isDeleted(),
+                ownerComment.isApproved());
     }
 }

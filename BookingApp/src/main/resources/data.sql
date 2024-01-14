@@ -240,17 +240,17 @@ INSERT INTO Price (accommodation_id, cost, from_date, to_date, type) VALUES
 INSERT INTO Address (city, street, latitude, longitude, accommodation_id) VALUES ('London', '456 Festival Boulevard', 23.15, 6.18, 12);
 
 -- Inserting data into AccommodationComment table
-INSERT INTO Accommodation_Comment (accommodation_id, guest_id, content, rating, date, reported, deleted)
-VALUES (1, 2, 'Great!', 3.8, '2024-10-01', false, false);
+INSERT INTO Accommodation_Comment (accommodation_id, guest_id, content, rating, date, reported, deleted, approved)
+VALUES (1, 2, 'Great!', 3.8, '2024-10-01', false, false, true);
 
 -- Inserting additional data into AccommodationComment table
-INSERT INTO Accommodation_Comment (accommodation_id, guest_id, content, rating, date, reported, deleted)
+INSERT INTO Accommodation_Comment (accommodation_id, guest_id, content, rating, date, reported, deleted, approved)
 VALUES
-    (1, 3, 'Fantastic experience!', 5.0, '2024-10-03', false, false),
-    (2, 1, 'Lovely cabin, enjoyed every moment.', 5.0, '2024-09-25', false, false),
-    (3, 3, 'The city apartment was perfect for our stay.', 4.0, '2024-10-05', false, false),
-    (1, 1, 'Not as expected, needs improvement.', 3.5, '2024-10-02', true, true),
-    (2, 2, 'Cozy and charming, highly recommend!', 5.0, '2024-09-28', false, false);
+    (1, 3, 'Fantastic experience!', 5.0, '2024-10-03', false, false, true),
+    (2, 1, 'Lovely cabin, enjoyed every moment.', 5.0, '2024-09-25', false, false, true),
+    (3, 3, 'The city apartment was perfect for our stay.', 4.0, '2024-10-05', false, false, true),
+    (1, 1, 'Not as expected, needs improvement.', 3.5, '2024-10-02', true, true, true),
+    (2, 2, 'Cozy and charming, highly recommend!', 5.0, '2024-09-28', false, false, true);
 
 
 INSERT INTO Accommodation_Rating (accommodation_id, guest_id, rate, date, reported) VALUES (1, 2, 4.0, '2024-10-01', false);
@@ -327,12 +327,12 @@ VALUES
 
 
 -- Example 1: Inserting a new OwnerComment with reported set to false
-INSERT INTO Owner_Comment (guest_id, owner_id, content, rating, date, reported, deleted)
-VALUES (1, 2, 'This is a comment.', 3.8, '2024-01-01', false, false);
+INSERT INTO Owner_Comment (guest_id, owner_id, content, rating, date, reported, deleted, approved)
+VALUES (1, 2, 'This is a comment.', 3.8, '2024-01-01', false, false, true);
 
 -- Example 2: Inserting another OwnerComment with reported set to true
-INSERT INTO Owner_Comment (guest_id, owner_id, content, rating, date, reported, deleted)
-VALUES (3, 2, 'Another comment.', 4.5, '2024-02-15', true, true);
+INSERT INTO Owner_Comment (guest_id, owner_id, content, rating, date, reported, deleted, approved)
+VALUES (3, 2, 'Another comment.', 4.5, '2024-02-15', true, true, true);
 
 -- Insert data into UserReport table
 INSERT INTO User_Report (reported_id, reporter_id, reason, date) VALUES

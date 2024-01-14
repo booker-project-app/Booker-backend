@@ -67,6 +67,7 @@ public class AccommodationCommentService implements IAccommodationCommentService
         accommodationComment.setReported(false);
         accommodationComment.setDate(new Date());
         accommodationComment.setDeleted(false);
+        accommodationComment.setApproved(false);
         accommodationComment.setRating(createAccommodationCommentDTO.getRating());
 
 

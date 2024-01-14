@@ -35,4 +35,6 @@ public @Data class OwnerComment {
 
     @Column(name = "deleted", nullable = false)
     private boolean deleted;
+    @Column(name = "approved", nullable = false)
+    private boolean approved;
 }

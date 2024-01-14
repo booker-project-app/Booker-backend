@@ -81,6 +81,7 @@ public class OwnerCommentService implements IOwnerCommentService {
         ownerComment.setReported(false);
         ownerComment.setDate(new Date());
         ownerComment.setDeleted(false);
+        ownerComment.setApproved(false);
         ownerComment.setRating(createOwnerCommentDTO.getRating());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -90,6 +91,9 @@ public class OwnerCommentService implements IOwnerCommentService {
             if (principal instanceof Guest) {
                 Guest user = (Guest) principal;
                 if (reservationRepository.findAllForGuest(user.getId(), createOwnerCommentDTO.getOwnerId()).size() == 0) {
+                    System.out.println("Guest ID: " + user.getId());
+                    System.out.println("Owner ID: " + createOwnerCommentDTO.getOwnerId());
+                    System.out.println(reservationRepository.findAllForGuest(user.getId(), createOwnerCommentDTO.getOwnerId()));
                     throw new RuntimeException("The guest has no uncancelled reservations. Commenting is not allowed.");
                 }
 
