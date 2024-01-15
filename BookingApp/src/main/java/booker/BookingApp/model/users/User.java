@@ -4,7 +4,9 @@ package booker.BookingApp.model.users;
 import booker.BookingApp.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,6 +22,8 @@ import java.util.List;
 @ToString(exclude = {"profilePicture"})
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
+@NoArgsConstructor
+@AllArgsConstructor
 public @Data class User implements UserDetails {
 
     @Id
@@ -56,6 +60,7 @@ public @Data class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private ProfilePicture profilePicture;
+
 
 
     public void setProfilePicturePath(String path){
