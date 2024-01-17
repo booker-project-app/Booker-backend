@@ -38,4 +38,6 @@ public @Data @AllArgsConstructor @NoArgsConstructor class Reservation {
     private boolean deleted;
     @Column(name = "price", nullable = false)
     private double price;
+    @Column(name = "to_time", nullable = false)
+    private String toTime;
 }

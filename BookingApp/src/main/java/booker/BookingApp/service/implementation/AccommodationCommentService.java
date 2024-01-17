@@ -20,11 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -80,14 +82,21 @@ public class AccommodationCommentService implements IAccommodationCommentService
 
             if (principal instanceof User) {
                 User user = (User) principal;
-                if (reservationRepository.findAllForGuestInAccommodation(user.getId(), createAccommodationCommentDTO.getAccommodationId()).size() == 0) {
+                List<Reservation> reservations = reservationRepository.findAllForGuestInAccommodation(user.getId(), createAccommodationCommentDTO.getAccommodationId());
+                for (Reservation r : reservations) {
+                    System.out.println(r.toString());
+                }
+                if (reservationRepository.findAllForGuestInAccommodation(user.getId(), createAccommodationCommentDTO.getAccommodationId()).size() != 0) {
+                    Reservation lastReservation = reservationRepository.findLastPastReservationForGuestInAccommodation(user.getId(), createAccommodationCommentDTO.getAccommodationId());
+                    System.out.println(lastReservation.toString());
+                    if(hasPassedFiveMinutesFromEnd(lastReservation.getToTime())) {
+                        throw new RuntimeException("5 minutes passed");
+                    }
+                } else {
                     throw new RuntimeException("The guest has no uncancelled reservations. Commenting is not allowed.");
                 }
 
-                List<Reservation> reservations = reservationRepository.findAllForGuestInAccommodation(user.getId(), createAccommodationCommentDTO.getAccommodationId());
-                if(hasPassedFiveMinutesFromEnd(reservations.get(reservations.size() - 1).getToDate())) {
-                    throw new RuntimeException("5 minutes passed");
-                }
+
 
 
 
@@ -167,21 +176,28 @@ public class AccommodationCommentService implements IAccommodationCommentService
         return notDeleted;
     }
 
-    private boolean hasPassedFiveMinutesFromEnd(String endDateString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime endDate = LocalDateTime.parse(endDateString, formatter);
+    private boolean hasPassedFiveMinutesFromEnd(String endTimeString) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date endTime = new Date();
+        try {
+            endTime = sdf.parse(endTimeString);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        LocalDateTime fiveMinutesAfterEnd = endDate.plusMinutes(5);
 
-        System.out.println("Current Date Time: " + currentDateTime);
-        System.out.println("End Date: " + endDate);
-        System.out.println("Five Minutes After End: " + fiveMinutesAfterEnd);
+        Date currentTime = new Date();
+        System.out.println("Current time: " + sdf.format(currentTime));
 
-        boolean result = currentDateTime.isAfter(fiveMinutesAfterEnd);
-        System.out.println("Result: " + result);
 
-        return result;
+        long timeDifference = currentTime.getTime() - endTime.getTime();
+
+        // Convert milliseconds to minutes
+        long minutesDifference = timeDifference / (60 * 1000);
+
+        // Check if 5 minutes have passed
+        return minutesDifference >= 5;
+
     }
 
     @Override

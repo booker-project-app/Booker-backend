@@ -20,6 +20,7 @@ public @Data @AllArgsConstructor @NoArgsConstructor class ReservationDTO {
     private ReservationStatus status;
     private boolean deleted;
     private double price;
+    private String toTime;
 
     public static ReservationDTO makeFromReservation(Reservation reservation){
         ReservationDTO reservationDTO = new ReservationDTO();
@@ -33,6 +34,7 @@ public @Data @AllArgsConstructor @NoArgsConstructor class ReservationDTO {
         reservationDTO.status = reservation.getStatus();
         reservationDTO.deleted = reservation.isDeleted();
         reservationDTO.price = reservation.getPrice();
+        reservationDTO.toTime = reservationDTO.getToTime();
         return  reservationDTO;
     }
 }
