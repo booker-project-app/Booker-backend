@@ -62,7 +62,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     @Query("SELECT r FROM Reservation r " +
             "WHERE  r.guestId = ?1 " +
-            "AND r.accommodation.id = ?1 " +
+            "AND r.accommodation.id = ?2 " +
             "AND r.status = 'ACCEPTED' " +
             "AND PARSEDATETIME(FORMATDATETIME(r.toTime, 'yyyy-MM-dd HH:mm:ss'), 'yyyy-MM-dd HH:mm:ss') <= CURRENT_TIMESTAMP " +
             "ORDER BY r.toTime DESC " +

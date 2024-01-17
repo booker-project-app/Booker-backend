@@ -293,17 +293,29 @@ VALUES
 --     (3, 3, '2024-03-20', '2024-03-25', 4, 'DENIED', 'ACCEPTED', false, 200.0),
 --     (4, 4, '2024-03-20', '2024-03-25', 4, 'ACCEPTED', 'CANCELED', false, 200.0);
 
-INSERT INTO Reservation (guest_id, accommodation_id, from_date, to_date, number_of_guests, request_status, reservation_status, deleted, price)
+-- INSERT INTO Reservation (guest_id, accommodation_id, from_date, to_date, number_of_guests, request_status, reservation_status, deleted, price)
+-- VALUES
+--     (1, 1, '2023-01-01 12:00:00', '2023-01-05 14:30:00', 1, 'ACCEPTED', 'ACCEPTED', false, 150.0),
+--     (1, 2, '2023-02-10 10:00:00', '2023-02-15 16:45:00', 1, 'ACCEPTED', 'CANCELED', false, 120.0),
+--     (3, 3, '2023-03-20 08:30:00', '2023-03-25 18:00:00', 4, 'DENIED', 'ACCEPTED', false, 200.0),
+--     (4, 4, '2023-03-20 09:15:00', '2023-03-25 17:30:00', 4, 'ACCEPTED', 'CANCELED', false, 200.0),
+--     (1, 1, '2024-01-01 11:00:00', '2024-01-05 13:45:00', 1, 'ACCEPTED', 'ACCEPTED', false, 150.0),
+--     (1, 1, '2024-02-10 10:30:00', '2024-02-15 15:15:00', 1, 'ACCEPTED', 'CANCELED', false, 120.0),
+--     (3, 3, '2024-03-20 08:00:00', '2024-03-25 17:45:00', 4, 'DENIED', 'ACCEPTED', false, 200.0),
+--     (4, 4, '2024-03-20 09:45:00', '2024-03-25 16:30:00', 4, 'ACCEPTED', 'CANCELED', false, 200.0),
+--     (1, 1, '2024-01-10 22:41:00', '2024-01-16 02:41:00', 3, 'ACCEPTED', 'ACCEPTED', false, 250.0);
+
+INSERT INTO Reservation (guest_id, accommodation_id, from_date, to_date, number_of_guests, request_status, reservation_status, deleted, price, to_time)
 VALUES
-    (1, 1, '2023-01-01 12:00:00', '2023-01-05 14:30:00', 1, 'ACCEPTED', 'ACCEPTED', false, 150.0),
-    (1, 2, '2023-02-10 10:00:00', '2023-02-15 16:45:00', 1, 'ACCEPTED', 'CANCELED', false, 120.0),
-    (3, 3, '2023-03-20 08:30:00', '2023-03-25 18:00:00', 4, 'DENIED', 'ACCEPTED', false, 200.0),
-    (4, 4, '2023-03-20 09:15:00', '2023-03-25 17:30:00', 4, 'ACCEPTED', 'CANCELED', false, 200.0),
-    (1, 1, '2024-01-01 11:00:00', '2024-01-05 13:45:00', 1, 'ACCEPTED', 'ACCEPTED', false, 150.0),
-    (1, 1, '2024-02-10 10:30:00', '2024-02-15 15:15:00', 1, 'ACCEPTED', 'CANCELED', false, 120.0),
-    (3, 3, '2024-03-20 08:00:00', '2024-03-25 17:45:00', 4, 'DENIED', 'ACCEPTED', false, 200.0),
-    (4, 4, '2024-03-20 09:45:00', '2024-03-25 16:30:00', 4, 'ACCEPTED', 'CANCELED', false, 200.0),
-    (1, 1, '2024-01-10 22:41:00', '2024-01-16 02:41:00', 3, 'ACCEPTED', 'ACCEPTED', false, 250.0);
+    (1, 1, '2023-01-01', '2023-01-05', 1, 'ACCEPTED', 'ACCEPTED', false, 150.0, '2023-01-05 14:30:00'),
+    (1, 2, '2023-02-10', '2023-02-15', 1, 'ACCEPTED', 'CANCELED', false, 120.0, '2023-02-15 16:45:00'),
+    (3, 3, '2023-03-20', '2023-03-25', 4, 'DENIED', 'ACCEPTED', false, 200.0, '2023-03-25 18:00:00'),
+    (4, 4, '2023-03-20', '2023-03-25', 4, 'ACCEPTED', 'CANCELED', false, 200.0, '2023-03-25 18:00:10'),
+    (1, 1, '2024-01-01', '2024-01-05', 1, 'ACCEPTED', 'ACCEPTED', false, 150.0, '2024-01-05 18:00:10'),
+    (1, 1, '2024-02-10', '2024-02-15', 1, 'ACCEPTED', 'CANCELED', false, 120.0, '2024-02-15 15:15:00'),
+    (3, 3, '2024-03-20', '2024-03-25', 4, 'DENIED', 'ACCEPTED', false, 200.0, '2024-03-25 17:45:00'),
+    (4, 4, '2024-03-20', '2024-03-25', 4, 'ACCEPTED', 'CANCELED', false, 200.0, '2024-03-25 16:30:00'),
+    (1, 1, '2024-01-15', '2024-01-31', 4, 'ACCEPTED', 'ACCEPTED', false, 200.0, '2024-01-31 12:12:00');
 
 
 INSERT INTO RESERVATION_REQUEST (guest_id, accommodation_id, from_date, to_date, number_of_guests, status, deleted, price)
