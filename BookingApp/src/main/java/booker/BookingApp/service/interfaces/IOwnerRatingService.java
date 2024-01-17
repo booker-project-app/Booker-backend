@@ -16,4 +16,5 @@ public interface IOwnerRatingService {
     public OwnerRatingDTO update(OwnerRatingDTO ownerRatingDTO);
     public List<OwnerRating> getAllForOwner(Long ownerId);
     public void report(Long id);
+    public void deleteForAdmin(Long id);
 }

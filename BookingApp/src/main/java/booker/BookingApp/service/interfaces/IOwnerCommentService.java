@@ -17,4 +17,5 @@ public interface IOwnerCommentService {
     public List<OwnerComment> findAllReported();
     public void report(Long id);
     public List<OwnerCommentDTO> findAllNotDeletedForOwner(Long ownerId);
+    public void deleteForAdmin(Long id);
 }

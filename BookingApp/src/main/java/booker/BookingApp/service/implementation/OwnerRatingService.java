@@ -123,5 +123,12 @@ public class OwnerRatingService implements IOwnerRatingService {
         ownerRatingRepository.save(rating);
     }
 
+    @Override
+    public void deleteForAdmin(Long id) {
+        OwnerRating rating = ownerRatingRepository.findById(id).get();
+        rating.setDeleted(true);
+        ownerRatingRepository.save(rating);
+    }
+
 
 }

@@ -47,6 +47,12 @@ public class AccommodationController {
         return new ResponseEntity<>(accommodation, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ArrayList<AccommodationListingDTO>> findAllAccommodation() throws IOException {
+        ArrayList<AccommodationListingDTO> accommodations = service.findAll();
+        return new ResponseEntity<>(accommodations, HttpStatus.OK);
+    }
+
     //find accepted accommodations for owner
     @GetMapping(value = "/owner/{ownerId}/active", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ArrayList<AccommodationListingDTO>> findOwnersAcceptedAccommodations(@PathVariable Long ownerId)

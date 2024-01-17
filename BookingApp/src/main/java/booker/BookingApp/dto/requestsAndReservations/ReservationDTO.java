@@ -21,7 +21,7 @@ public @Data @AllArgsConstructor @NoArgsConstructor class ReservationDTO {
     private boolean deleted;
     private double price;
 
-    public ReservationDTO makeFromReservation(Reservation reservation){
+    public static ReservationDTO makeFromReservation(Reservation reservation){
         ReservationDTO reservationDTO = new ReservationDTO();
         reservationDTO.guestId = reservation.getGuestId();
         reservationDTO.accommodationId = reservation.getAccommodation().getId();

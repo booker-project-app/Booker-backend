@@ -153,4 +153,11 @@ public class AccommodationCommentController {
         List<AccommodationCommentDTO> commentDTOS = accommodationCommentService.findAllNotDeletedForAccommodation(accommodation_id);
         return new ResponseEntity<>(commentDTOS, HttpStatus.OK);
     }
+
+    @PutMapping(value = "/delete/{comment_id}")
+    public ResponseEntity<AccommodationCommentDTO> deleteForAdmin(@PathVariable Long comment_id) {
+        accommodationCommentService.deleteForAdmin(comment_id);
+        AccommodationCommentDTO accommodationCommentDTO = new AccommodationCommentDTO(accommodationCommentService.findOne(comment_id));
+        return new ResponseEntity<>(accommodationCommentDTO, HttpStatus.OK);
+    }
 }

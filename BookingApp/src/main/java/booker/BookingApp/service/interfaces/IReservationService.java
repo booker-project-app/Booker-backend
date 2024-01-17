@@ -2,6 +2,7 @@ package booker.BookingApp.service.interfaces;
 
 import booker.BookingApp.dto.requestsAndReservations.ReservationDTO;
 import booker.BookingApp.dto.requestsAndReservations.ReservationRequestDTO;
+import booker.BookingApp.model.accommodation.Accommodation;
 
 import java.util.ArrayList;
 
@@ -18,5 +19,7 @@ public interface IReservationService {
 
     void delete(Long id);
 
-    void cancel(Long guestId, Long reservationId);
+    boolean checkDeadlineExpired(String fromDateString, Accommodation accommodation);
+
+    boolean cancel(Long reservationId);
 }

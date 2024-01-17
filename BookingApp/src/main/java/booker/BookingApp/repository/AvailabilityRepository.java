@@ -23,4 +23,7 @@ public interface AvailabilityRepository extends JpaRepository<Availability, Long
             @Param("date") Date date
     );
 
+    @Query(value = "SELECT a FROM Availability a WHERE a.accommodation.id=:accommodationId")
+    List<Availability> findByAccommodationId(@Param("accommodationId") Long accommodationId);
+
 }

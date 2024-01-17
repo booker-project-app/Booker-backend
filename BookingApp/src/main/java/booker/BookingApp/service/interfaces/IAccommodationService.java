@@ -58,6 +58,8 @@ public interface IAccommodationService {
 
     void updateAvailabilitiesForAccommodation(Long accommodationId, String startDate, String endDate);
 
+    void returnAvailabilitiesForAccommodation(Long accommodationId, String startDate, String endDate);
+
     ArrayList<AccommodationNameDTO> getAccommodationNames(Long ownerId);
 
     Long getAccommodationId(String accName);

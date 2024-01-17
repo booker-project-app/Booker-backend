@@ -1,21 +1,26 @@
+-- Inserting data with activation_link and activated fields
 INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
-VALUES ('Prvi', 'Gost', 'gost1@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'adresa1', '060000000', 'GUEST', false, false, false, ARRAY[1, 12, 8], 'activation_link1', true, false, null);
+VALUES ('Marko', 'Marković', 'email1@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'adresa1', '060000000', 'GUEST', false, false, false, ARRAY[1, 12, 8], 'activation_link1', true, false, null);
 
 INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
-VALUES ('Prvi', 'Vlasnik', 'vlasnik2@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'adresa2', '060000001', 'OWNER', false, false, false, null, 'activation_link2', true, false, null);
+VALUES ('Petar', 'Petrović', 'email2@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'adresa2', '060000001', 'OWNER', false, false, false, null, 'activation_link2', true, false, null);
 
 INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
-VALUES ('Drugi', 'Gost', 'gost3@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'adresa3', '060000002', 'GUEST', false, false, false, ARRAY[5, 6, 7, 8, 9], 'activation_link3', true, false, null);
+VALUES ('Adam', 'Adamović', 'email3@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'adresa3', '060000002', 'GUEST', false, false, false, ARRAY[5, 6, 7, 8, 9], 'activation_link3', true, false, null);
 
 INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
-VALUES ('Treci', 'Gost', 'gost123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Adresa 123', '3210087', 'GUEST', false, false, false, ARRAY[1, 2, 9, 3], 'activation_link4', true, false, null);
+VALUES ('Pera', 'Peric', 'pera123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Adresa 123', '3210087', 'GUEST', false, false, false, ARRAY[1, 2, 9, 3], 'activation_link4', true, false, null);
 
 INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
-VALUES ('Prvi', 'Admin', 'admin123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Adresa admin', '3210088', 'ADMIN', null, null, null, null, 'activation_link5', true, false, null);
+VALUES ('Admin', 'Admin', 'admin123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Adresa admin', '3210088', 'ADMIN', null, null, null, null, 'activation_link5', true, false, null);
 
 INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
-VALUES ('Treci', 'Vlasnik', 'mika123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Mikina adresa', '3210089', 'OWNER', false, false, false, null, 'activation_link6', true, false, null);
+VALUES ('Mika', 'Mikic', 'mika123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Mikina adresa', '3210089', 'OWNER', false, false, false, null, 'activation_link6', true, false, null);
 
+
+
+-- Inserting data into Accommodation table
+-- Inserting data into Accommodation table
 INSERT INTO Accommodation (title, description, short_description, deadline, min_capacity, max_capacity, owner_id, type, accepted, manual_accepting) VALUES  ('Cozy Cabin', 'A charming cabin in the woods.', 'Rustic cabin retreat', 15, 1, 4, 2, 0, true, true);
 INSERT INTO Accommodation (title, description, short_description, deadline, min_capacity, max_capacity, owner_id, type, accepted, manual_accepting) VALUES ('Luxury Villa', 'A luxurious villa with stunning views.', 'Luxury villa with pool', 30, 1, 3, 6, 2, true, false);
 INSERT INTO Accommodation (title, description, short_description, deadline, min_capacity, max_capacity, owner_id, type, accepted, manual_accepting) VALUES  ('City Apartment', 'Modern apartment in the heart of the city.', 'Downtown apartment', 20, 1, 4, 6, 1, true, true);
@@ -40,13 +45,13 @@ INSERT INTO Image(accommodation_id, path_front, path_mobile) VALUES (1, '../../a
 INSERT INTO Image(accommodation_id, path_front, path_mobile) VALUES (1, '../../assets/images/living-room.jpg', '../../../../../res/drawable/living-room.jpg');
 INSERT INTO Image(accommodation_id, path_front, path_mobile) VALUES (1, '../../assets/images/kitchen-2165756_640.jpg', '../../../../../res/drawable/kitchen-2165756_640.jpg');
 INSERT INTO Availability (start_date, end_date, accommodation_id) VALUES ('2024-10-03', '2024-01-10', 1);
-INSERT INTO Availability (start_date, end_date, accommodation_id) VALUES ('2024-02-15', '2024-02-28', 1);
+INSERT INTO Availability (start_date, end_date, accommodation_id) VALUES ('2023-02-15', '2023-02-28', 1);
 INSERT INTO Availability (start_date, end_date, accommodation_id) VALUES ('2024-03-20', '2024-04-05', 1);
 INSERT INTO Price (accommodation_id, cost, from_date, to_date, type) VALUES (1, 100.0, '2024-10-03', '2024-01-10', 0);
 INSERT INTO Price (accommodation_id, cost, from_date, to_date, type) VALUES (1, 150.0, '2024-01-01', '2024-02-01', 0);
 INSERT INTO Price (accommodation_id, cost, from_date, to_date, type) VALUES (1, 80.0, '2023-01-01', '2023-02-01', 0);
 INSERT INTO Price (accommodation_id, cost, from_date, to_date, type) VALUES (1, 100.0, '2024-02-10', '2024-02-14', 0);
-INSERT INTO Price (accommodation_id, cost, from_date, to_date, type) VALUES (1, 120.0, '2024-02-15', '2024-02-28', 0);
+INSERT INTO Price (accommodation_id, cost, from_date, to_date, type) VALUES (1, 120.0, '2023-02-15', '2023-02-28', 0);
 INSERT INTO Price (accommodation_id, cost, from_date, to_date, type) VALUES (1, 90.0, '2024-03-20', '2024-04-05', 0);
 INSERT INTO Address (city, street, latitude, longitude, accommodation_id) VALUES ('London', '456 Forest Avenue', 22.15, 32.15, 1);
 

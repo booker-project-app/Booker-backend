@@ -129,4 +129,11 @@ public class OwnerCommentController {
         List<OwnerCommentDTO> comments = ownerCommentService.findAllNotDeletedForOwner(owner_id);
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
+
+    @PutMapping(value = "/delete/{comment_id}")
+    public ResponseEntity<OwnerCommentDTO> delete(@PathVariable Long comment_id) {
+        ownerCommentService.deleteForAdmin(comment_id);
+        OwnerCommentDTO reportOwnerCommentDTO = new OwnerCommentDTO(ownerCommentService.findOne(comment_id));
+        return new ResponseEntity<>(reportOwnerCommentDTO, HttpStatus.OK);
+    }
 }

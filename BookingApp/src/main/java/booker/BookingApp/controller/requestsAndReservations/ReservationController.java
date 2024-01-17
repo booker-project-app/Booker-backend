@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/reservations")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ReservationController {
     @Autowired
     ReservationService reservationService;
@@ -63,9 +64,10 @@ public class ReservationController {
         }
     }
 
-    @PutMapping(value = "/guest/{guestId}/cancel/{id}")
-    public ResponseEntity<Void> cancel(@PathVariable Long guestId, @PathVariable Long id){
-        reservationService.cancel(guestId, id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping(value = "/guest/cancel/{id}", consumes = "application/json")
+    public ResponseEntity<Boolean> cancel(@PathVariable("id") Long id){
+        boolean cancelled = reservationService.cancel(id);
+        System.out.println("rezultat otkazivanja: " + cancelled);
+        return new ResponseEntity<>(cancelled, HttpStatus.OK);
     }
 }

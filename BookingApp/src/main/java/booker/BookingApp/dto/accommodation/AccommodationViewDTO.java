@@ -23,6 +23,7 @@ public @Data @AllArgsConstructor @NoArgsConstructor class AccommodationViewDTO {
     private int min_capacity;
     private int max_capacity;
     private boolean manual_accepting;
+    private int deadline;
 
     public static AccommodationViewDTO makeFromAccommodation(Accommodation accommodation) {
         List<AvailabilityDTO> availabilityDTOS = new ArrayList<>();
@@ -36,6 +37,6 @@ public @Data @AllArgsConstructor @NoArgsConstructor class AccommodationViewDTO {
                 accommodation.getPrices(), accommodation.getRatings(),
                 accommodation.getComments(), accommodation.getOwner_id(),
                 accommodation.getMin_capacity(), accommodation.getMax_capacity(),
-                accommodation.isManual_accepting());
+                accommodation.isManual_accepting(), accommodation.getDeadline());
     }
 }

@@ -133,4 +133,11 @@ public class OwnerRatingController {
         OwnerRatingDTO ratingDTO = new OwnerRatingDTO(ownerRatingService.findOne(rating_id));
         return new ResponseEntity<>(ratingDTO, HttpStatus.OK);
     }
+
+    @PutMapping(value = "/delete/{rating_id}")
+    public ResponseEntity<OwnerRatingDTO> delete(@PathVariable Long rating_id) {
+        ownerRatingService.deleteForAdmin(rating_id);
+        OwnerRatingDTO ratingDTO = new OwnerRatingDTO(ownerRatingService.findOne(rating_id));
+        return new ResponseEntity<>(ratingDTO, HttpStatus.OK);
+    }
 }

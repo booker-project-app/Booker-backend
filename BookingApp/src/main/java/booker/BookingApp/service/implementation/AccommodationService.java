@@ -511,6 +511,20 @@ public class AccommodationService implements IAccommodationService {
     }
 
     @Override
+    public void returnAvailabilitiesForAccommodation(Long accommodationId, String startDate, String endDate) {
+        try {
+            Accommodation accommodation = repository.findById(accommodationId).get();
+            List<Availability> availabilities = accommodation.getAvailabilities();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date from = sdf.parse(startDate);
+            Date to = sdf.parse(endDate);
+            availabilityService.returnAvailabilities(accommodationId, from, to);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    @Override
     public ArrayList<AccommodationNameDTO> getAccommodationNames(Long ownerId) {
         List<AccommodationListingDTO> accommodations = findOwnersActiveAccommodations(ownerId);
         ArrayList<AccommodationNameDTO> names = new ArrayList<>();

@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface AccommodationCommentRepository extends JpaRepository<AccommodationComment, Long> {
-    @Query("select ac from AccommodationComment ac where ac.accommodation.id = ?1")
+    @Query("select ac from AccommodationComment ac where ac.accommodation.id = ?1 and ac.deleted=false")
     public List<AccommodationComment> findAllForAccommodation(Long accommodationId);
 
     @Query("select ac from AccommodationComment ac where ac.reported = true")

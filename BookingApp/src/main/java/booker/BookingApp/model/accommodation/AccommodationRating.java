@@ -1,5 +1,6 @@
 package booker.BookingApp.model.accommodation;
 
+import booker.BookingApp.model.users.Guest;
 import booker.BookingApp.model.users.User;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -18,7 +19,7 @@ public @Data class AccommodationRating {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "guest_id")
-    private User guest;
+    private Guest guest;
 
     @Column(name = "rate", nullable = false)
     private float rate;
@@ -26,4 +27,6 @@ public @Data class AccommodationRating {
     private Date date;
     @Column(name = "reported", nullable = false)
     private boolean reported;
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted;
 }

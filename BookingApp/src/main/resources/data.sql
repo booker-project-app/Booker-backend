@@ -249,18 +249,18 @@ VALUES
     (1, 3, 'Fantastic experience!', 5.0, '2024-10-03', false, false, true),
     (2, 1, 'Lovely cabin, enjoyed every moment.', 5.0, '2024-09-25', false, false, true),
     (3, 3, 'The city apartment was perfect for our stay.', 4.0, '2024-10-05', false, false, true),
-    (1, 1, 'Not as expected, needs improvement.', 3.5, '2024-10-02', true, true, true),
+    (1, 1, 'Not as expected, needs improvement.', 3.5, '2024-10-02', true, false, true),
     (2, 2, 'Cozy and charming, highly recommend!', 5.0, '2024-09-28', false, false, true);
 
 
-INSERT INTO Accommodation_Rating (accommodation_id, guest_id, rate, date, reported) VALUES (1, 2, 4.0, '2024-10-01', false);
+INSERT INTO Accommodation_Rating (accommodation_id, guest_id, rate, date, reported, deleted) VALUES (1, 1, 4.0, '2024-10-01', false, false);
 
 -- Inserting additional data into AccommodationRating table
-INSERT INTO Accommodation_Rating (accommodation_id, guest_id, rate, date, reported)
+INSERT INTO Accommodation_Rating (accommodation_id, guest_id, rate, date, reported, deleted)
 VALUES
-    (1, 3, 5.0, '2024-10-03', false),
-    (2, 1, 4.5, '2024-09-25', false),
-    (3, 2, 3.8, '2024-10-05', true);
+    (1, 3, 5.0, '2024-10-03', false, false),
+    (2, 1, 4.5, '2024-09-25', false, false),
+    (3, 1, 3.8, '2024-10-05', true, false);
 
 INSERT INTO Owner_Rating (owner_id, guest_id, rate, date, reported, deleted)
 VALUES (2, 1, 4.5, '2024-01-01', false, false);
@@ -271,7 +271,7 @@ VALUES (2, 3, 3.8, '2024-02-15', false, false);
 INSERT INTO Owner_Rating (owner_id, guest_id, rate, date, reported, deleted)
 VALUES (6, 3, 2.5, '2024-04-20', false, false);
 INSERT INTO Owner_Rating (owner_id, guest_id, rate, date, reported, deleted)
-VALUES (6, 1, 4.0, '2024-05-05', true, true);
+VALUES (6, 1, 4.0, '2024-05-05', true, false);
 
 INSERT INTO Profile_Picture (path_front, path_mobile,  user_id)
 VALUES
@@ -295,16 +295,14 @@ VALUES
 
 INSERT INTO Reservation (guest_id, accommodation_id, from_date, to_date, number_of_guests, request_status, reservation_status, deleted, price)
 VALUES
-    (1, 1, '2023-01-01 12:00:00', '2023-01-05 14:30:00', 1, 'ACCEPTED', 'ACCEPTED', false, 150.0),
-    (1, 2, '2023-02-10 10:00:00', '2023-02-15 16:45:00', 1, 'ACCEPTED', 'CANCELED', false, 120.0),
-    (3, 3, '2023-03-20 08:30:00', '2023-03-25 18:00:00', 4, 'DENIED', 'ACCEPTED', false, 200.0),
-    (4, 4, '2023-03-20 09:15:00', '2023-03-25 17:30:00', 4, 'ACCEPTED', 'CANCELED', false, 200.0),
-    (1, 1, '2024-01-01 11:00:00', '2024-01-05 13:45:00', 1, 'ACCEPTED', 'ACCEPTED', false, 150.0),
-    (1, 1, '2024-02-10 10:30:00', '2024-02-15 15:15:00', 1, 'ACCEPTED', 'CANCELED', false, 120.0),
-    (3, 3, '2024-03-20 08:00:00', '2024-03-25 17:45:00', 4, 'DENIED', 'ACCEPTED', false, 200.0),
-    (4, 4, '2024-03-20 09:45:00', '2024-03-25 16:30:00', 4, 'ACCEPTED', 'CANCELED', false, 200.0),
-    (1, 1, '2024-01-10 22:41:00', '2024-01-14 17:30:00', 3, 'ACCEPTED', 'ACCEPTED', false, 250.0);
-
+    (1, 1, '2025-01-01', '2025-01-05', 1, 'ACCEPTED', 'ACCEPTED', false, 150.0),
+    (1, 2, '2023-02-10', '2023-02-15', 1, 'ACCEPTED', 'CANCELED', false, 120.0),
+    (3, 3, '2023-03-20', '2023-03-25', 4, 'DENIED', 'ACCEPTED', false, 200.0),
+    (4, 4, '2023-03-20', '2023-03-25', 4, 'ACCEPTED', 'CANCELED', false, 200.0),
+    (1, 1, '2024-01-01', '2024-01-05', 1, 'ACCEPTED', 'ACCEPTED', false, 150.0),
+    (1, 1, '2024-02-10', '2024-02-15', 1, 'ACCEPTED', 'CANCELED', false, 120.0),
+    (3, 3, '2024-03-20', '2024-03-25', 4, 'DENIED', 'ACCEPTED', false, 200.0),
+    (4, 4, '2024-03-20', '2024-03-25', 4, 'ACCEPTED', 'CANCELED', false, 200.0);
 
 INSERT INTO RESERVATION_REQUEST (guest_id, accommodation_id, from_date, to_date, number_of_guests, status, deleted, price)
 VALUES
@@ -332,7 +330,7 @@ VALUES (1, 2, 'This is a comment.', 3.8, '2024-01-01', false, false, true);
 
 -- Example 2: Inserting another OwnerComment with reported set to true
 INSERT INTO Owner_Comment (guest_id, owner_id, content, rating, date, reported, deleted, approved)
-VALUES (3, 2, 'Another comment.', 4.5, '2024-02-15', true, true, true);
+VALUES (3, 2, 'Another comment.', 4.5, '2024-02-15', true, false, true);
 
 -- Insert data into UserReport table
 INSERT INTO User_Report (reported_id, reporter_id, reason, date) VALUES

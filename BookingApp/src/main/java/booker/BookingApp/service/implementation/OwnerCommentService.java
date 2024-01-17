@@ -148,5 +148,12 @@ public class OwnerCommentService implements IOwnerCommentService {
         return notDeleted;
     }
 
+    @Override
+    public void deleteForAdmin(Long id) {
+        OwnerComment comment = ownerCommentRepository.findById(id).get();
+        comment.setDeleted(true);
+        ownerCommentRepository.save(comment);
+    }
+
 
 }

@@ -23,9 +23,16 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query(value="select r from Reservation r where r.accommodation.id=:accommodationId")
     public List<Reservation> findAllForAccommodation(@Param("accommodationId") Long accommodationId);
 
+    @Query(value = "SELECT r FROM Reservation r WHERE r.guestId = :id")
+    public List<Reservation> getAllForGuest(@Param("id") Long id);
+
+    @Query(value = "SELECT r FROM Reservation r WHERE r.accommodation.id = :id")
+    public List<Reservation> getAllForAccommodation(@Param("id") Long id);
+  
     @Query(value = "SELECT DISTINCT r.guestId FROM Reservation r WHERE r.accommodation.owner_id=:ownerId AND r.status='ACCEPTED' " +
             "AND PARSEDATETIME(FORMATDATETIME(r.toDate, 'yyyy-MM-dd'), 'yyyy-MM-dd') < CURRENT_DATE")
     public List<Long> getAllGuestIdsForOwner(@Param("ownerId") Long ownerId);
+  
     @Query("SELECT r FROM Reservation r " +
             "WHERE r.guestId = ?1 " +
             "AND r.accommodation.id = ?2 " +
@@ -49,4 +56,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "AND PARSEDATETIME(FORMATDATETIME(r.fromDate, 'yyyy-MM-dd'), 'yyyy-MM-dd') < ?2 " +
             "AND PARSEDATETIME(FORMATDATETIME(r.toDate, 'yyyy-MM-dd'), 'yyyy-MM-dd') > ?3")
     public List<Reservation> findCurrentlyActiveReservationsForAccommodation(Long accommodationId, Date from, Date end);
+
 }

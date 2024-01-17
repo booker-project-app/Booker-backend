@@ -34,4 +34,19 @@ public @Data @AllArgsConstructor class ReservationRequestDTO {
         );
         return  requestDTO;
     }
+
+    public static ReservationRequest makeRequestFromDTO(ReservationRequestDTO requestDTO){
+        ReservationRequest request = new ReservationRequest(
+                requestDTO.getGuestId(),
+                requestDTO.getAccommodationId(),
+                requestDTO.getId(),
+                requestDTO.getFromDate(),
+                requestDTO.getToDate(),
+                requestDTO.getNumberOfGuests(),
+                requestDTO.getStatus(),
+                requestDTO.isDeleted(),
+                requestDTO.getPrice()
+        );
+        return  request;
+    }
 }

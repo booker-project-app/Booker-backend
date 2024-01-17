@@ -5,11 +5,12 @@ import booker.BookingApp.enums.ReservationRequestStatus;
 import booker.BookingApp.model.accommodation.Filter;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public interface IReservationRequestService {
 
-    ReservationRequestDTO create(ReservationRequestDTO request);
+    ReservationRequestDTO create(ReservationRequestDTO request) throws ParseException, IOException;
 
     boolean checkReservationAcceptingType(Long accommodationId);
 

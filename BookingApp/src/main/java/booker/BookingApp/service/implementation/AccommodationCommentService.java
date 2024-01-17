@@ -183,4 +183,11 @@ public class AccommodationCommentService implements IAccommodationCommentService
 
         return result;
     }
+
+    @Override
+    public void deleteForAdmin(Long id) {
+        AccommodationComment comment = accommodationCommentRepository.findById(id).orElseGet(null);
+        comment.setDeleted(true);
+        accommodationCommentRepository.save(comment);
+    }
 }

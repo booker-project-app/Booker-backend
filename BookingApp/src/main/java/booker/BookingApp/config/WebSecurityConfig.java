@@ -128,10 +128,14 @@ public class WebSecurityConfig {
                             auth.requestMatchers(antMatcher("/api/requests/owner/{ownerId}/filter")).hasAuthority("OWNER");      //for owner
                             auth.requestMatchers(antMatcher("/api/requests/owner/accept_reservation/{accept}")).hasAuthority("OWNER");      //for owner
                             auth.requestMatchers(antMatcher("/api/requests/guest/**")).hasAuthority("GUEST");      //for guest
+                            auth.requestMatchers(antMatcher("/api/requests")).hasAuthority("GUEST");
                             auth.requestMatchers(antMatcher("/api/reservations/*")).hasAnyAuthority("GUEST", "OWNER");
                             auth.requestMatchers(antMatcher("/api/reservations/owner/**")).hasAuthority("OWNER");
                             auth.requestMatchers(antMatcher("/api/reservations/accommodation/**")).hasAuthority("OWNER");
                             auth.requestMatchers(antMatcher("/api/reservations/guest/**")).hasAuthority("GUEST");
+                            auth.requestMatchers(antMatcher("/api/reservations/guest/{guestId}")).hasAuthority("GUEST");
+                            auth.requestMatchers(antMatcher("/api/reservations/accommodation/{accommodationId}")).hasAuthority("OWNER");
+                            auth.requestMatchers(antMatcher("/api/reservations/guest/cancel/{id}")).hasAuthority("GUEST");
                             auth.requestMatchers(antMatcher("/api/report/owner/*/**")).permitAll();      //for owner
                             auth.requestMatchers(antMatcher("/api/notifications/*")).hasAnyAuthority("GUEST", "OWNER");      //they have notif
                             auth.requestMatchers(antMatcher("/api/accommodations/priceType/*")).permitAll();    //used in search - everyone
@@ -156,18 +160,22 @@ public class WebSecurityConfig {
                             auth.requestMatchers(antMatcher("/api/accommodation_comments/*/comment")).permitAll();
                             auth.requestMatchers(antMatcher("/api/accommodation_comments/update")).hasAuthority("GUEST");
                             auth.requestMatchers(antMatcher("/api/accommodation_comment/remove/*")).hasAuthority("GUEST");
+                            auth.requestMatchers(antMatcher("/api/accommodation_comments/delete/{comment_id}")).hasAuthority("ADMIN");
                             auth.requestMatchers(antMatcher("/api/accommodation_comments/all/reported")).hasAuthority("ADMIN");
                             auth.requestMatchers(antMatcher("/api/accommodation_comments/report/*")).hasAuthority("OWNER");
                             auth.requestMatchers(antMatcher("/api/accommodation_ratings/all")).permitAll();
                             auth.requestMatchers(antMatcher("/api/accommodation_ratings/*/rating")).permitAll();
+                            auth.requestMatchers(antMatcher("/api/accommodation_ratings/all/*/ratings")).permitAll();
                             auth.requestMatchers(antMatcher("/api/accommodation_ratings/add_rating")).hasAuthority("GUEST");
                             auth.requestMatchers(antMatcher("/api/accommodation_ratings/update")).hasAuthority("GUEST");
                             auth.requestMatchers(antMatcher("/api/accommodation_ratings/remove/*")).hasAuthority("GUEST");
+                            auth.requestMatchers(antMatcher("/api/accommodation_ratings/delete/{rating_id}")).hasAuthority("ADMIN");
                             auth.requestMatchers(antMatcher("/api/accommodation_ratings/all/reported")).hasAuthority("ADMIN");
                             auth.requestMatchers(antMatcher("/api/accommodation_ratings/report/*")).hasAuthority("OWNER");
                             auth.requestMatchers(antMatcher("/api/owner_comments/all")).permitAll();
                             auth.requestMatchers(antMatcher("/api/owner_comments/*/comment")).permitAll();
                             auth.requestMatchers(antMatcher("/api/owner_comments/remove/*")).hasAuthority("GUEST");
+                            auth.requestMatchers(antMatcher("/api/owner_comments/delete/{comment_id}")).hasAuthority("ADMIN");
                             auth.requestMatchers(antMatcher("/api/owner_comments/add_comment")).hasAuthority("GUEST");
                             auth.requestMatchers(antMatcher("/api/owner_comments/update")).hasAuthority("GUEST");
                             auth.requestMatchers(antMatcher("/api/owner_comments/all/reported")).hasAuthority("ADMIN");
@@ -176,6 +184,7 @@ public class WebSecurityConfig {
                             auth.requestMatchers(antMatcher("/api/owner_ratings/all")).permitAll();
                             auth.requestMatchers(antMatcher("/api/owner_ratings/*/rating")).permitAll();
                             auth.requestMatchers(antMatcher("/api/owner_ratings/remove/*")).hasAuthority("GUEST");
+                            auth.requestMatchers(antMatcher("/api/owner_ratings/delete/{rating_id}")).hasAuthority("ADMIN");
                             auth.requestMatchers(antMatcher("/api/owner_ratings/add_rating")).hasAuthority("GUEST");
                             auth.requestMatchers(antMatcher("/api/owner_ratings/update")).hasAuthority("GUEST");
                             auth.requestMatchers(antMatcher("/api/owner_ratings/*/ratings")).permitAll();
@@ -224,6 +233,7 @@ public class WebSecurityConfig {
                         antMatcher(HttpMethod.DELETE, "/api/requests/guest/**"),
                         antMatcher(HttpMethod.POST, "/api/reservations/**"),
                         antMatcher(HttpMethod.PUT, "/api/reservations/**"),
+                        antMatcher(HttpMethod.PUT, "/api/reservations/guest/cancel/{id}"),
                         antMatcher(HttpMethod.GET, "/api/reservations/**"),
                         antMatcher(HttpMethod.DELETE, "/api/reservations/**"),
                         antMatcher(HttpMethod.DELETE, "/api/owners/**"),
@@ -250,6 +260,10 @@ public class WebSecurityConfig {
                         antMatcher(HttpMethod.GET, "/api/owner_ratings/all"),
                         antMatcher(HttpMethod.GET, "/api/owner_ratings/*/rating"),
                         antMatcher(HttpMethod.GET, "/api/owner_ratings/*/ratings"),
+                        antMatcher(HttpMethod.PUT, "/api/owner_ratings/delete/{rating_id}"),
+                        antMatcher(HttpMethod.PUT, "/api/owner_comments/delete/{comment_id}"),
+                        antMatcher(HttpMethod.PUT, "/api/accommodation_ratings/delete/{rating_id}"),
+                        antMatcher(HttpMethod.PUT, "/api/accommodation_comments/delete/{comment_id}"),
                         antMatcher(HttpMethod.GET, "/api/users/*"),
                         antMatcher(HttpMethod.GET, "/api/owner_comments/all/*/not_deleted"),
                         antMatcher(HttpMethod.GET, "/api/accommodation_comments/all/*/not_deleted"),

@@ -68,6 +68,13 @@ public class AccommodationRatingService implements IAccommodationRatingService {
 
     }
 
+    @Override
+    public void deleteForAdmin(Long id) {
+        AccommodationRating rating = accommodationRatingRepository.findById(id).orElseGet(null);
+        rating.setDeleted(true);
+        accommodationRatingRepository.save(rating);
+    }
+
 //    public AccommodationRating save(AccommodationRating accommodationRating) {
 //        return accommodationRatingRepository.save(accommodationRating);
 //    }

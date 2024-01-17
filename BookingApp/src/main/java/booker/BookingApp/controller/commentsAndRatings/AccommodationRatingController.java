@@ -135,4 +135,11 @@ public class AccommodationRatingController {
         return new ResponseEntity<>(ratingDTO, HttpStatus.OK);
     }
 
+    @PutMapping(value = "/delete/{rating_id}")
+    public ResponseEntity<AccommodationRatingDTO> deleteForAdmin(@PathVariable Long rating_id) {
+        accommodationRatingService.deleteForAdmin(rating_id);
+        AccommodationRatingDTO ratingDTO = new AccommodationRatingDTO(accommodationRatingService.findOne(rating_id));
+        return new ResponseEntity<>(ratingDTO, HttpStatus.OK);
+    }
+
 }

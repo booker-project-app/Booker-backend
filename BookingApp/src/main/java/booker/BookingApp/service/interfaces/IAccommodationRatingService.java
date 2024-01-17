@@ -17,4 +17,5 @@ public interface IAccommodationRatingService {
     public void delete (Long id);
     public List<AccommodationRating> findAllReported();
     public void report(Long id);
+    public void deleteForAdmin(Long id);
 }

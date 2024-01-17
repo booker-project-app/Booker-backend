@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AvailabilityService implements IAvailabilityService {
@@ -147,6 +148,56 @@ public class AvailabilityService implements IAvailabilityService {
         } catch (ParseException e) {
             System.out.println(e);
             return false;
+        }
+    }
+
+    @Override
+    public void returnAvailabilities(Long accommodationId, Date startDate, Date endDate) {
+        List<Availability> allAvailabilities = repository.findByAccommodationId(accommodationId);
+        // sve dostupnosti koje su povezane sa datumima rezervacije koja se otkazuje
+        List<Availability> modifiedAvailabilities = allAvailabilities.stream()
+                .filter(availability -> (daysCalculator(startDate, -1).equals(availability.getEndDate()) ||
+                        endDate.equals(availability.getStartDate())))
+                .collect(Collectors.toList());
+        System.out.println("modifikovano");
+        System.out.println(modifiedAvailabilities);
+        if (modifiedAvailabilities.isEmpty()){
+            // dodavanje nezavisne dostupnosti
+            Availability availability = new Availability();
+            availability.setAccommodation(accommodationRepository.findById(accommodationId).get());
+            availability.setStartDate(startDate);
+            availability.setEndDate(endDate);
+            repository.save(availability);
+        } else if (modifiedAvailabilities.size() == 1) {
+            // spajanje na pocetku ili na kraju
+            if (daysCalculator(startDate, -1).equals(modifiedAvailabilities.get(0).getEndDate())){
+                // ako se poklapa pocetni datum rezervacije sa krajnjim datumom dostupnosti
+                // postavi se krajni datum rezervacije za krajnji datum dostupnosti
+                Availability availability = modifiedAvailabilities.get(0);
+                availability.setEndDate(endDate);
+                repository.save(availability);
+            } else if (endDate.equals(modifiedAvailabilities.get(0).getStartDate())) {
+                // ako se poklapa krajnji datum rezervacije sa pocetnim datumom dostupnosti
+                // postavi se pocetni datum rezervacije za pocetni datum dostupnosti
+                Availability availability = modifiedAvailabilities.get(0);
+                availability.setStartDate(startDate);
+                repository.save(availability);
+            }
+        } else if (modifiedAvailabilities.size() == 2) {
+            // spajanje dve dostupnosti u jednu
+            Availability first;
+            Availability second;
+            if (modifiedAvailabilities.get(0).getStartDate().before(modifiedAvailabilities.get(1).getStartDate())){
+                first = modifiedAvailabilities.get(0);
+                second = modifiedAvailabilities.get(1);
+            } else {
+                first = modifiedAvailabilities.get(1);
+                second = modifiedAvailabilities.get(0);
+            }
+            // krajnji datum kasnije dostupnosti postaje krajnji datum prve tj jedine dostupnosti a ta kasnija se brise
+            first.setEndDate(second.getEndDate());
+            repository.save(first);
+            repository.delete(second);
         }
     }
 

@@ -27,4 +27,6 @@ public interface IAvailabilityService {
     void refactorAvailability(Availability availability, Date fromDate, Date toDate);
 
     boolean checkForOverlaps(ReservationRequestDTO requestDTO, ReservationRequestDTO acceptedRequest);
+
+    void returnAvailabilities(Long accommodationId, Date startDate, Date endDate);
 }
