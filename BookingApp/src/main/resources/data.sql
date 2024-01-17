@@ -342,7 +342,10 @@ INSERT INTO User_Report (reported_id, reporter_id, reason, date) VALUES
 
 
 
-
+INSERT INTO Notification (user_id, time, content, title) VALUES
+                                                             (1, '2023-01-01 10:00:00', 'Notification content 1', 'Notification title 1'),
+                                                             (1, '2023-02-01 12:30:00', 'Notification content 2', 'Notification title 2'),
+                                                             (2, '2023-03-01 15:45:00', 'Notification content 3', 'Notification title 3');
 
 
 

@@ -2,6 +2,8 @@ package booker.BookingApp.service.implementation;
 
 import booker.BookingApp.dto.commentsAndRatings.CreateOwnerCommentDTO;
 import booker.BookingApp.dto.commentsAndRatings.OwnerCommentDTO;
+import booker.BookingApp.dto.notifications.CreateNotificationDTO;
+import booker.BookingApp.dto.notifications.NotificationDTO;
 import booker.BookingApp.model.commentsAndRatings.OwnerComment;
 import booker.BookingApp.model.users.Guest;
 import booker.BookingApp.model.users.Owner;
@@ -10,6 +12,7 @@ import booker.BookingApp.repository.ReservationRepository;
 import booker.BookingApp.repository.UserRepository;
 import booker.BookingApp.service.interfaces.IOwnerCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,10 @@ public class OwnerCommentService implements IOwnerCommentService {
     private UserRepository userRepository;
     @Autowired
     private ReservationRepository reservationRepository;
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public OwnerComment findOne(Long id) {
@@ -105,6 +112,17 @@ public class OwnerCommentService implements IOwnerCommentService {
         }
         Owner owner = (Owner) userRepository.findById(createOwnerCommentDTO.getOwnerId()).orElseGet(null);
         ownerComment.setOwner(owner);
+
+        CreateNotificationDTO dto = new CreateNotificationDTO();
+        dto.setUserId(createOwnerCommentDTO.getOwnerId());
+        Guest guest = (Guest) userRepository.findById(createOwnerCommentDTO.getGuestId()).orElseGet(null);
+        dto.setTitle("NEW OWNER RATING");
+        dto.setContent("User " + guest.getName() + " " + guest.getSurname() + " rated you!");
+        NotificationDTO notificationDTO = notificationService.create(dto);
+
+        this.simpMessagingTemplate.convertAndSend("/socket-publisher/" + createOwnerCommentDTO.getOwnerId(), notificationDTO);
+
+
 
         ownerCommentRepository.save(ownerComment);
         OwnerCommentDTO ownerCommentDTO = OwnerCommentDTO.createFromOwnerComment(ownerComment);

@@ -186,6 +186,7 @@ public class WebSecurityConfig {
                             auth.requestMatchers(antMatcher("/api/accommodation_comments/all/*/not_deleted")).permitAll();
                             auth.requestMatchers(antMatcher("/api/report_user/all")).permitAll();
                             auth.requestMatchers(antMatcher("/api/report_user/add_report")).hasAnyAuthority("GUEST", "OWNER");
+                            auth.requestMatchers(antMatcher("/socket-publisher/*")).permitAll();
                             auth.requestMatchers(antMatcher("/h2-console/**")).permitAll();     //for everyone
 
 
