@@ -28,4 +28,6 @@ public interface IGuestService {
     boolean isFavourite(Long guestId, Long accId);
 
     int findNumOfCancellations(Long guestId);
+
+    void updateSettings(GuestDTO guest, boolean checked);
 }

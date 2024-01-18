@@ -6,6 +6,7 @@ import booker.BookingApp.enums.ReservationRequestStatus;
 import booker.BookingApp.model.accommodation.Filter;
 import booker.BookingApp.service.interfaces.IReservationRequestService;
 import ch.qos.logback.core.net.SyslogOutputStream;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,7 +26,7 @@ public class ReservationRequestController {
 
     //create a request
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ReservationRequestDTO> insert(@RequestBody ReservationRequestDTO request) throws Exception {
+    public ResponseEntity<ReservationRequestDTO> insert(@Valid @RequestBody ReservationRequestDTO request) throws Exception {
         ReservationRequestDTO requestDTO = service.create(request);
         if(requestDTO == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

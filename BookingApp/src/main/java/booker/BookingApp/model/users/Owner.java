@@ -30,5 +30,12 @@ public class Owner extends User {
     @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<OwnerComment> comments;
-
+    @Column(name = "requestNotificationEnabled")
+    private boolean requestNotificationEnabled;
+    @Column(name = "cancellationNotificationEnabled")
+    private boolean cancellationNotificationEnabled;
+    @Column(name = "ratingNotificationEnabled")
+    private boolean ratingNotificationEnabled;
+    @Column(name = "accNotificationEnabled")
+    private boolean accNotificationEnabled;
 }

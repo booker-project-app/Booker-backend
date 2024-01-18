@@ -1,21 +1,21 @@
 -- Inserting data with activation_link and activated fields
-INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
-VALUES ('Marko', 'Marković', 'email1@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'adresa1', '060000000', 'GUEST', false, false, false, ARRAY[1, 12, 8], 'activation_link1', true, false, null);
+INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp, notification_enabled, request_notification_enabled, cancellation_notification_enabled, rating_notification_enabled, acc_notification_enabled)
+VALUES ('Marko', 'Marković', 'email1@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'adresa1', '060000000', 'GUEST', false, false, false, ARRAY[1, 12, 8], 'activation_link1', true, false, null, true, false, false, false, false);
 
-INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
-VALUES ('Petar', 'Petrović', 'email2@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'adresa2', '060000001', 'OWNER', false, false, false, null, 'activation_link2', true, false, null);
+INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp, notification_enabled, request_notification_enabled, cancellation_notification_enabled, rating_notification_enabled, acc_notification_enabled)
+VALUES ('Petar', 'Petrović', 'email2@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'adresa2', '060000001', 'OWNER', false, false, false, null, 'activation_link2', true, false, null, false, false, true, true, true);
 
-INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
-VALUES ('Adam', 'Adamović', 'email3@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'adresa3', '060000002', 'GUEST', false, false, false, ARRAY[5, 6, 7, 8, 9], 'activation_link3', true, false, null);
+INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp, notification_enabled, request_notification_enabled, cancellation_notification_enabled, rating_notification_enabled, acc_notification_enabled)
+VALUES ('Adam', 'Adamović', 'email3@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'adresa3', '060000002', 'GUEST', false, false, false, ARRAY[5, 6, 7, 8, 9], 'activation_link3', true, false, null, true, false, false, false, false);
 
-INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
-VALUES ('Pera', 'Peric', 'pera123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Adresa 123', '3210087', 'GUEST', false, false, false, ARRAY[1, 2, 9, 3], 'activation_link4', true, false, null);
+INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp, notification_enabled, request_notification_enabled, cancellation_notification_enabled, rating_notification_enabled, acc_notification_enabled)
+VALUES ('Pera', 'Peric', 'pera123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Adresa 123', '3210087', 'GUEST', false, false, false, ARRAY[1, 2, 9, 3], 'activation_link4', true, false, null, true, false, false, false, false);
 
-INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
-VALUES ('Admin', 'Admin', 'admin123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Adresa admin', '3210088', 'ADMIN', null, null, null, null, 'activation_link5', true, false, null);
+INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp, notification_enabled, request_notification_enabled, cancellation_notification_enabled, rating_notification_enabled, acc_notification_enabled)
+VALUES ('Admin', 'Admin', 'admin123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Adresa admin', '3210088', 'ADMIN', null, null, null, null, 'activation_link5', true, false, null, false, false, false, false, false);
 
-INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
-VALUES ('Mika', 'Mikic', 'mika123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Mikina adresa', '3210089', 'OWNER', false, false, false, null, 'activation_link6', true, false, null);
+INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp, notification_enabled, request_notification_enabled, cancellation_notification_enabled, rating_notification_enabled, acc_notification_enabled)
+VALUES ('Mika', 'Mikic', 'mika123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Mikina adresa', '3210089', 'OWNER', false, false, false, null, 'activation_link6', true, false, null, false, true, true, true, true);
 
 INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
 VALUES ('Nikola', 'Nikolic', 'nikola123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Mikina adresa', '3210089', 'GUEST', false, false, false, null, 'activation_link6', true, false, null);
@@ -354,6 +354,10 @@ INSERT INTO User_Report (reported_id, reporter_id, reason, date) VALUES
                                                                     (2, 3, 'Spamming', '2024-01-12'),
                                                                     (3, 1, 'Harassment', '2024-01-13');
 
+INSERT INTO Notification (user_id, time, content, type) VALUES
+(2, '2024-01-16 19:00:00', 'Somebody rated you!', 2),
+(2, '2024-01-16 19:10:00', 'Somebody rated your accommodation!', 3),
+(1, '2024-01-16 18:00:00', 'Your reservation request is answered!', 4);
 
 
 

@@ -36,8 +36,10 @@ public class ReservationRequestService implements IReservationRequestService {
     @Override
     public ReservationRequestDTO create(ReservationRequestDTO requestDto) {
         ReservationRequest request = ReservationRequestDTO.makeRequestFromDTO(requestDto);
+        request.setAccommodationId(request.getAccommodationId());
         // if accommodation has automatically accepting reservation requests option, then
         // create reservation and change reservation request status
+        System.out.println("MILA PRVI PUT " + requestDto.getAccommodationId());
         if (!checkReservationAcceptingType(request.getAccommodationId()) &&
                 !checkAvailability(request.getAccommodationId(), request.getFromDate(), request.getToDate())){
             request.setStatus(ReservationRequestStatus.ACCEPTED);
@@ -46,6 +48,7 @@ public class ReservationRequestService implements IReservationRequestService {
         }
         //if accommodation is available for time slot
         if(!checkAvailability(request.getAccommodationId(), request.getFromDate(), request.getToDate())) {
+            System.out.println("NIJE PROSAO VALIDACIJE ZA AVAILABILITY");
             return null;
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -54,20 +57,26 @@ public class ReservationRequestService implements IReservationRequestService {
             Date to = sdf.parse(request.getToDate());
             //dates have to be valid (not in the past)
             if(!from.after(new Date()) || !to.after(from)) {
+                System.out.println("NIJE PROSAO VALIDACIJE ZA DATUME");
                 return null;
             }
             //price has to be adequate
             if (request.getPrice() != accommodationService.findPriceForDateRange(request.getAccommodationId(), sdf.parse(request.getFromDate()), sdf.parse(request.getToDate()), requestDto.getNumberOfGuests())) {
+                System.out.println("NIJE PROSAO VALIDACIJE ZA CENE");
+                System.out.println(request.getPrice());
+                System.out.println(accommodationService.findPriceForDateRange(request.getAccommodationId(), sdf.parse(request.getFromDate()), sdf.parse(request.getToDate()), requestDto.getNumberOfGuests()));
                 return null;
             }
 
             AccommodationViewDTO accommodation = accommodationService.findOne(requestDto.getAccommodationId());
             //and number of guests has to be between min and max capacity
             if(request.getNumberOfGuests() < accommodation.getMin_capacity() || request.getNumberOfGuests() > accommodation.getMax_capacity()) {
+                System.out.println("NIJE PROSAO VALIDACIJE ZA BROJ GOSTIJU");
                 return null;
             }
 
             //validation passed
+            System.out.println("Prosao validacije");
             this.repository.save(request);
             return ReservationRequestDTO.makeFromRequest(request);
 
@@ -93,6 +102,7 @@ public class ReservationRequestService implements IReservationRequestService {
     @Override
     public boolean checkReservationAcceptingType(Long accommodationId) {
         try{
+            System.out.println("MILA " + accommodationId);
             AccommodationViewDTO accommodation = accommodationService.findOne(accommodationId);
             if (accommodation.isManual_accepting()){
                 return true;

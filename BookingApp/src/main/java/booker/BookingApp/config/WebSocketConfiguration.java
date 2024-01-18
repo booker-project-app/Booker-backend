@@ -2,6 +2,7 @@ package booker.BookingApp.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
@@ -11,6 +12,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
  * Koristi autokonfiguraciju da uveze potrebne artifakte kako bi se omogucilo slanje poruka preko web soketa.
  */
 @EnableWebSocketMessageBroker
+@CrossOrigin(origins = "http://localhost:4200")
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 
     /*
@@ -21,7 +23,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/socket") // Definisemo endpoint koji ce klijenti koristiti da se povezu sa serverom.
                 // U ovom slucaju, URL za konekciju ce biti http://localhost:8080/socket/
-                .setAllowedOrigins("*") // Dozvoljavamo serveru da prima zahteve bilo kog porekla
+                .setAllowedOrigins("http://localhost:4200") // Dozvoljavamo serveru da prima zahteve bilo kog porekla
                 .withSockJS(); // Koristi se SockJS: https://github.com/sockjs/sockjs-protocol
     }
 
@@ -39,5 +41,4 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
         // Server kada salje poruke, salje ih na rute koje su ovde definisane, a klijenti cekaju na poruke.
         // Vise ruta odvajamo zarezom, npr. enableSimpleBroker("/ruta1", "/ruta2");
     }
-
 }

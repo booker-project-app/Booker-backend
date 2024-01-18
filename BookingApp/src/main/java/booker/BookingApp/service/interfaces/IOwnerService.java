@@ -21,4 +21,6 @@ public interface IOwnerService {
     ArrayList<OwnerDTO> getAllBlocked();
     ArrayList<OwnerDTO> getAllReported();
     ArrayList<GuestDTO> getAllGuestsForOwner(Long ownerId);
+
+    void updateSettings(OwnerDTO owner, Long id, boolean checked);
 }

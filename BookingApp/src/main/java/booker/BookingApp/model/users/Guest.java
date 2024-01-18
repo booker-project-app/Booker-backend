@@ -25,5 +25,7 @@ public class Guest extends User {
     private boolean deleted;
     @Column(name = "favourite_accommodations")
     private ArrayList<Long> favouriteAccommodations;
+    @Column(name = "notificationEnabled")
+    private boolean notificationEnabled;
 
 }

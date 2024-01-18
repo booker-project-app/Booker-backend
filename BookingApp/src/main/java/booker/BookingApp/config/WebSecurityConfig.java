@@ -37,6 +37,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
+import java.util.Arrays;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 import static org.springframework.security.core.context.SecurityContextHolder.MODE_INHERITABLETHREADLOCAL;
@@ -195,6 +197,10 @@ public class WebSecurityConfig {
                             auth.requestMatchers(antMatcher("/api/accommodation_comments/all/*/not_deleted")).permitAll();
                             auth.requestMatchers(antMatcher("/api/report_user/all")).permitAll();
                             auth.requestMatchers(antMatcher("/api/report_user/add_report")).hasAnyAuthority("GUEST", "OWNER");
+                            auth.requestMatchers(antMatcher("/socket/**")).permitAll();
+                            auth.requestMatchers(antMatcher("/sendMessageRest")).permitAll();
+                            auth.requestMatchers(antMatcher("/socket-subscriber")).permitAll();
+                            auth.requestMatchers(antMatcher("/socket-publisher/*")).permitAll();
                             auth.requestMatchers(antMatcher("/h2-console/**")).permitAll();     //for everyone
 
 
@@ -277,7 +283,7 @@ public class WebSecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*");
+                registry.addMapping("/**").allowedOrigins("http://localhost:4200").allowedHeaders("*").allowCredentials(true);
             }
         };
     }

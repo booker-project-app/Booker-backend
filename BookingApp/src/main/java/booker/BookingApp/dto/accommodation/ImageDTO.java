@@ -2,10 +2,14 @@ package booker.BookingApp.dto.accommodation;
 
 import booker.BookingApp.model.accommodation.Accommodation;
 import booker.BookingApp.model.accommodation.Image;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 public @Data class ImageDTO {
+    @NotNull
     private Long id;
+    @NotEmpty
     private String path;
 
     public ImageDTO(Image image) {
