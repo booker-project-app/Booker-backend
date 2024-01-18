@@ -11,15 +11,13 @@ import booker.BookingApp.service.interfaces.IAvailabilityService;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -199,6 +197,15 @@ public class AvailabilityService implements IAvailabilityService {
             repository.save(first);
             repository.delete(second);
         }
+    }
+
+    @Transactional
+    public AvailabilityDTO getAvailability(Long id) throws IOException {
+        Optional<Availability> availability = repository.findById(id);
+        if (availability.isEmpty()) {
+            return null;
+        }
+        return AvailabilityDTO.makeFromAvailability(availability.get());
     }
 
 }

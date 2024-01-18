@@ -2,7 +2,6 @@ package booker.BookingApp.model.accommodation;
 
 import booker.BookingApp.enums.PriceType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Date;
