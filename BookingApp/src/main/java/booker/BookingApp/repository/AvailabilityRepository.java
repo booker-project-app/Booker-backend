@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+@Repository
 public interface AvailabilityRepository extends JpaRepository<Availability, Long> {
     @Query(value = "SELECT a from Availability AS a WHERE a.accommodation.id=:accommodationId AND :startDate >= a.startDate AND :startDate <=a.endDate AND :endDate >=a.startDate AND :endDate <=a.endDate")
     List<Availability> checkForDateRange(

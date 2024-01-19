@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+@Repository
 public interface AccommodationRepository  extends JpaRepository<Accommodation, Long> {
     @Query(value="select a from Accommodation a WHERE a.address.city like %:location% and :people >= a.min_capacity and :people <= a.max_capacity and a.accepted = true")
     public List<Accommodation> searchAccommodations(@Param("location") String location, @Param("people") int people);

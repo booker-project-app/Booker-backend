@@ -391,10 +391,13 @@ public class AccommodationService implements IAccommodationService {
 
     @Override
     public Accommodation updateAvailability(Long accommodationId, UpdateAvailabilityDTO updateAvailabilityDTO) throws Exception{
-        Accommodation accommodation = repository.findById(accommodationId).orElseGet(null);
+        Accommodation accommodation = repository.findById(accommodationId).orElse(null);
         if (accommodation == null) {
             return null;
         }
+
+
+
         repository.save(accommodation);
 
         Availability availability = new Availability();

@@ -195,8 +195,8 @@ public class ReservationRepositoryTest {
         Date endDate = sdf.parse(endDateString);
 
         List<Reservation> reservations = reservationRepository.findCurrentlyActiveReservationsForAccommodation(accommodationId, startDate, endDate);
-        System.out.println("StartDate = " + startDateString);
-        System.out.println("EndDate = " + endDateString);
+        System.out.println("StartDate = " + startDate);
+        System.out.println("EndDate = " + endDate);
         System.out.println("accommodationId = " + accommodationId);
         System.out.println("Number of Reservations: " + reservations.size());
         System.out.println("Reservations: " + reservations);
