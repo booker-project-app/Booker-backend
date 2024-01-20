@@ -1,50 +1,39 @@
 package booker.BookingApp.springtesting.service;
 
-import booker.BookingApp.dto.accommodation.AccommodationViewDTO;
-import booker.BookingApp.dto.accommodation.AvailabilityDTO;
-import booker.BookingApp.dto.accommodation.CreatePriceDTO;
-import booker.BookingApp.dto.accommodation.UpdateAvailabilityDTO;
-import booker.BookingApp.enums.AccommodationType;
-import booker.BookingApp.enums.PriceType;
+import booker.BookingApp.dto.accommodation.*;
+import booker.BookingApp.enums.*;
+import booker.BookingApp.exceptions.*;
 import booker.BookingApp.model.accommodation.*;
 import booker.BookingApp.model.requestsAndReservations.Reservation;
-import booker.BookingApp.repository.AccommodationRepository;
-import booker.BookingApp.repository.AvailabilityRepository;
-import booker.BookingApp.repository.PriceRepository;
-import booker.BookingApp.repository.ReservationRepository;
+import booker.BookingApp.model.users.User;
+import booker.BookingApp.repository.*;
 import booker.BookingApp.service.implementation.AccommodationService;
-import booker.BookingApp.service.implementation.AvailabilityService;
-import booker.BookingApp.service.implementation.PriceService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertThrows;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource("classpath:application-test.properties")
+
+////@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+////@TestPropertySource("classpath:application-test.properties")
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@ActiveProfiles("test")
 public class AccommodationAvailabilityUpdatingTest {
 
     @MockBean
@@ -59,6 +48,9 @@ public class AccommodationAvailabilityUpdatingTest {
     @MockBean
     private PriceRepository priceRepository;
 
+    @MockBean
+    private UserRepository userRepository;
+
     @Captor
     private ArgumentCaptor<Accommodation> accommodationArgumentCaptor;
     @Captor
@@ -69,28 +61,65 @@ public class AccommodationAvailabilityUpdatingTest {
 
     @Test
     @DisplayName("should not update availability, accommodation is null")
-    public void shouldNotUpdateAvailability_AccommodationIsNull() throws Exception {
-        Long nonExistingAccommodationId = 999L;
-        CreatePriceDTO createPriceDTO = new CreatePriceDTO();
-        createPriceDTO.setCost(159.0);
-        createPriceDTO.setFromDate(new Date());
-        createPriceDTO.setToDate(new Date());
-        createPriceDTO.setType(PriceType.PER_GUEST);
-        UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
-        updateAvailabilityDTO.setStartDate(new Date());
-        updateAvailabilityDTO.setEndDate(new Date());
-        updateAvailabilityDTO.setPrice(createPriceDTO);
-        updateAvailabilityDTO.setDeadline(3);
+    public void shouldNotUpdateAvailability_NonExistingAccommodation() throws Exception {
+       User user = new User();
+       user.setId(1L);
+       user.setName("John");
+       user.setSurname("Doe");
+       user.setEmail("john@example.com");
+       user.setPassword("12345678");
+       user.setAddress("123 Main Street");
+       user.setPhone("1234567890");
+       user.setRole(Role.OWNER);
+       user.setLastPasswordResetDate(null);
+       user.setActivated(true);
+       user.setActivationExpired(false);
+       user.setActivationTimestamp(new Date());
+       user.setProfilePicture(null);
 
+       Accommodation accommodation = new Accommodation();
+       accommodation.setId(999L);
+       accommodation.setTitle("accommodation");
+       accommodation.setDescription("long description");
+       accommodation.setShortDescription("description");
+       accommodation.setOwner_id(1L);
+       accommodation.setAmenities(new ArrayList<Amenity>());
+       accommodation.setImages(new ArrayList<Image>());
+       accommodation.setAvailabilities(new ArrayList<Availability>());
+       accommodation.setAddress(null);
+       accommodation.setPrices(new ArrayList<Price>());
+       accommodation.setRatings(new ArrayList<AccommodationRating>());
+       accommodation.setComments(new ArrayList<AccommodationComment>());
+       accommodation.setDeadline(0);
+       accommodation.setMin_capacity(1);
+       accommodation.setMax_capacity(10);
+       accommodation.setType(AccommodationType.ROOM);
+       accommodation.setAccepted(true);
+       accommodation.setManual_accepting(false);
 
-        Accommodation result = accommodationService.updateAvailability(nonExistingAccommodationId, updateAvailabilityDTO);
+       CreatePriceDTO createPriceDTO = new CreatePriceDTO();
+       createPriceDTO.setCost(150.0);
+       createPriceDTO.setFromDate(new Date());
+       createPriceDTO.setToDate(new Date());
+       createPriceDTO.setType(PriceType.PER_GUEST);
+
+       UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
+       updateAvailabilityDTO.setStartDate(new Date());
+       updateAvailabilityDTO.setEndDate(new Date());
+       updateAvailabilityDTO.setPrice(createPriceDTO);
+       updateAvailabilityDTO.setDeadline(3);
+
+       Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+       Mockito.when(accommodationRepository.findById(999L)).thenReturn(Optional.empty());
+
+        AccommodationUpdatedAvailabilityDTO result = accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO);
+
 
 
         assertNull(result);
-        verify(accommodationRepository).findById(nonExistingAccommodationId);
+        verify(accommodationRepository).findById(accommodation.getId());
         verifyNoMoreInteractions(accommodationRepository);
-        verifyNoInteractions(availabilityRepository);
-        verifyNoInteractions(priceRepository);
+        verifyNoInteractions(availabilityRepository, priceRepository);
 
 
     }
@@ -98,7 +127,42 @@ public class AccommodationAvailabilityUpdatingTest {
     @Test
     @DisplayName("should return null, start date is in past")
     public void shouldNotUpdateAvailability_startDateInPast() throws Exception {
-        Long existingAccommodationId = 1L;
+
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setSurname("Doe");
+        user.setEmail("john@example.com");
+        user.setPassword("12345678");
+        user.setAddress("123 Main Street");
+        user.setPhone("1234567890");
+        user.setRole(Role.OWNER);
+        user.setLastPasswordResetDate(null);
+        user.setActivated(true);
+        user.setActivationExpired(false);
+        user.setActivationTimestamp(new Date());
+        user.setProfilePicture(null);
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(1L);
+        accommodation.setTitle("accommodation");
+        accommodation.setDescription("long description");
+        accommodation.setShortDescription("description");
+        accommodation.setOwner_id(1L);
+        accommodation.setAmenities(new ArrayList<Amenity>());
+        accommodation.setImages(new ArrayList<Image>());
+        accommodation.setAvailabilities(new ArrayList<Availability>());
+        accommodation.setAddress(null);
+        accommodation.setPrices(new ArrayList<Price>());
+        accommodation.setRatings(new ArrayList<AccommodationRating>());
+        accommodation.setComments(new ArrayList<AccommodationComment>());
+        accommodation.setDeadline(0);
+        accommodation.setMin_capacity(1);
+        accommodation.setMax_capacity(10);
+        accommodation.setType(AccommodationType.ROOM);
+        accommodation.setAccepted(true);
+        accommodation.setManual_accepting(false);
+
         CreatePriceDTO createPriceDTO = new CreatePriceDTO();
         createPriceDTO.setFromDate(new Date());
         createPriceDTO.setToDate(new Date());
@@ -107,12 +171,16 @@ public class AccommodationAvailabilityUpdatingTest {
 
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
         updateAvailabilityDTO.setStartDate(Date.from(Instant.now().minus(30, ChronoUnit.DAYS)));
-        updateAvailabilityDTO.setEndDate(new Date());
+        updateAvailabilityDTO.setEndDate(Date.from(Instant.now().plus(15, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setPrice(createPriceDTO);
         updateAvailabilityDTO.setDeadline(3);
 
-        assertNull(accommodationService.updateAvailability(existingAccommodationId, updateAvailabilityDTO));
-        verify(accommodationRepository).findById(existingAccommodationId);
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(accommodationRepository.findById(accommodation.getId())).thenReturn(Optional.of(accommodation));
+
+        assertThrows(StartDateInPastException.class, () -> accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO));
+
+        verify(accommodationRepository).findById(accommodation.getId());
         verifyNoMoreInteractions(accommodationRepository);
         verifyNoInteractions(availabilityRepository);
         verifyNoInteractions(priceRepository);
@@ -122,7 +190,40 @@ public class AccommodationAvailabilityUpdatingTest {
     @Test
     @DisplayName("should not update availability, end date is in past")
     public void shouldNotUpdateAvailability_EndDateInPast() throws Exception {
-        Long existingAccommodationId = 1L;
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setSurname("Doe");
+        user.setEmail("john@example.com");
+        user.setPassword("12345678");
+        user.setAddress("123 Main Street");
+        user.setPhone("1234567890");
+        user.setRole(Role.OWNER);
+        user.setLastPasswordResetDate(null);
+        user.setActivated(true);
+        user.setActivationExpired(false);
+        user.setActivationTimestamp(new Date());
+        user.setProfilePicture(null);
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(1L);
+        accommodation.setTitle("accommodation");
+        accommodation.setDescription("long description");
+        accommodation.setShortDescription("description");
+        accommodation.setOwner_id(1L);
+        accommodation.setAmenities(new ArrayList<Amenity>());
+        accommodation.setImages(new ArrayList<Image>());
+        accommodation.setAvailabilities(new ArrayList<Availability>());
+        accommodation.setAddress(null);
+        accommodation.setPrices(new ArrayList<Price>());
+        accommodation.setRatings(new ArrayList<AccommodationRating>());
+        accommodation.setComments(new ArrayList<AccommodationComment>());
+        accommodation.setDeadline(0);
+        accommodation.setMin_capacity(1);
+        accommodation.setMax_capacity(10);
+        accommodation.setType(AccommodationType.ROOM);
+        accommodation.setAccepted(true);
+        accommodation.setManual_accepting(false);
         CreatePriceDTO createPriceDTO = new CreatePriceDTO();
         createPriceDTO.setFromDate(new Date());
         createPriceDTO.setToDate(new Date());
@@ -130,13 +231,17 @@ public class AccommodationAvailabilityUpdatingTest {
         createPriceDTO.setType(PriceType.PER_GUEST);
 
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
-        updateAvailabilityDTO.setStartDate(new Date());
+        updateAvailabilityDTO.setStartDate(Date.from(Instant.now().plus(30, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setEndDate(Date.from(Instant.now().minus(30, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setPrice(createPriceDTO);
         updateAvailabilityDTO.setDeadline(3);
 
-        assertNull(accommodationService.updateAvailability(existingAccommodationId, updateAvailabilityDTO));
-        verify(accommodationRepository).findById(existingAccommodationId);
+        Mockito.when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        Mockito.when(accommodationRepository.findById(accommodation.getId())).thenReturn(Optional.of(accommodation));
+
+        assertThrows(EndDateInPastException.class, () -> accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO));
+
+        verify(accommodationRepository).findById(accommodation.getId());
         verifyNoMoreInteractions(accommodationRepository);
         verifyNoInteractions(availabilityRepository);
         verifyNoInteractions(priceRepository);
@@ -145,7 +250,40 @@ public class AccommodationAvailabilityUpdatingTest {
     @Test
     @DisplayName("should not update availability, both dates are in the past")
     public void shouldNotUpdateAvailability_BothDatesInPast() throws Exception {
-        Long existingAccommodationId = 1L;
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setSurname("Doe");
+        user.setEmail("john@example.com");
+        user.setPassword("12345678");
+        user.setAddress("123 Main Street");
+        user.setPhone("1234567890");
+        user.setRole(Role.OWNER);
+        user.setLastPasswordResetDate(null);
+        user.setActivated(true);
+        user.setActivationExpired(false);
+        user.setActivationTimestamp(new Date());
+        user.setProfilePicture(null);
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(1L);
+        accommodation.setTitle("accommodation");
+        accommodation.setDescription("long description");
+        accommodation.setShortDescription("description");
+        accommodation.setOwner_id(1L);
+        accommodation.setAmenities(new ArrayList<Amenity>());
+        accommodation.setImages(new ArrayList<Image>());
+        accommodation.setAvailabilities(new ArrayList<Availability>());
+        accommodation.setAddress(null);
+        accommodation.setPrices(new ArrayList<Price>());
+        accommodation.setRatings(new ArrayList<AccommodationRating>());
+        accommodation.setComments(new ArrayList<AccommodationComment>());
+        accommodation.setDeadline(0);
+        accommodation.setMin_capacity(1);
+        accommodation.setMax_capacity(10);
+        accommodation.setType(AccommodationType.ROOM);
+        accommodation.setAccepted(true);
+        accommodation.setManual_accepting(false);
         CreatePriceDTO createPriceDTO = new CreatePriceDTO();
         createPriceDTO.setFromDate(new Date());
         createPriceDTO.setToDate(new Date());
@@ -158,8 +296,12 @@ public class AccommodationAvailabilityUpdatingTest {
         updateAvailabilityDTO.setPrice(createPriceDTO);
         updateAvailabilityDTO.setDeadline(3);
 
-        assertNull(accommodationService.updateAvailability(existingAccommodationId, updateAvailabilityDTO));
-        verify(accommodationRepository).findById(existingAccommodationId);
+        Mockito.when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        Mockito.when(accommodationRepository.findById(accommodation.getId())).thenReturn(Optional.of(accommodation));
+
+        assertThrows(BothDatesInPastException.class, () -> accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO));
+
+        verify(accommodationRepository).findById(accommodation.getId());
         verifyNoMoreInteractions(accommodationRepository);
         verifyNoInteractions(availabilityRepository);
         verifyNoInteractions(priceRepository);
@@ -168,7 +310,40 @@ public class AccommodationAvailabilityUpdatingTest {
     @Test
     @DisplayName("should not update availability, end date is before start date")
     public void shouldNotUpdateAvailability_EndDateBeforeStartDate() throws Exception {
-        Long existingAccommodationId = 1L;
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setSurname("Doe");
+        user.setEmail("john@example.com");
+        user.setPassword("12345678");
+        user.setAddress("123 Main Street");
+        user.setPhone("1234567890");
+        user.setRole(Role.OWNER);
+        user.setLastPasswordResetDate(null);
+        user.setActivated(true);
+        user.setActivationExpired(false);
+        user.setActivationTimestamp(new Date());
+        user.setProfilePicture(null);
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(1L);
+        accommodation.setTitle("accommodation");
+        accommodation.setDescription("long description");
+        accommodation.setShortDescription("description");
+        accommodation.setOwner_id(1L);
+        accommodation.setAmenities(new ArrayList<Amenity>());
+        accommodation.setImages(new ArrayList<Image>());
+        accommodation.setAvailabilities(new ArrayList<Availability>());
+        accommodation.setAddress(null);
+        accommodation.setPrices(new ArrayList<Price>());
+        accommodation.setRatings(new ArrayList<AccommodationRating>());
+        accommodation.setComments(new ArrayList<AccommodationComment>());
+        accommodation.setDeadline(0);
+        accommodation.setMin_capacity(1);
+        accommodation.setMax_capacity(10);
+        accommodation.setType(AccommodationType.ROOM);
+        accommodation.setAccepted(true);
+        accommodation.setManual_accepting(false);
         CreatePriceDTO createPriceDTO = new CreatePriceDTO();
         createPriceDTO.setCost(150.0);
         createPriceDTO.setFromDate(new Date());
@@ -181,8 +356,12 @@ public class AccommodationAvailabilityUpdatingTest {
         updateAvailabilityDTO.setPrice(createPriceDTO);
         updateAvailabilityDTO.setDeadline(3);
 
-        assertNull(accommodationService.updateAvailability(existingAccommodationId, updateAvailabilityDTO));
-        verify(accommodationRepository).findById(existingAccommodationId);
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(accommodationRepository.findById(1L)).thenReturn(Optional.of(accommodation));
+
+        assertThrows(EndDateBeforeStartDateException.class, () -> accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO));
+
+        verify(accommodationRepository).findById(accommodation.getId());
         verifyNoMoreInteractions(accommodationRepository);
         verifyNoInteractions(availabilityRepository);
         verifyNoInteractions(priceRepository);
@@ -192,21 +371,57 @@ public class AccommodationAvailabilityUpdatingTest {
     @Test
     @DisplayName("should not update availability, deadline is negative")
     public void shouldNotUpdateAvailability_NegativeDeadline() throws Exception {
-        Long existingAccommodationId = 1L;
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setSurname("Doe");
+        user.setEmail("john@example.com");
+        user.setPassword("12345678");
+        user.setAddress("123 Main Street");
+        user.setPhone("1234567890");
+        user.setRole(Role.OWNER);
+        user.setLastPasswordResetDate(null);
+        user.setActivated(true);
+        user.setActivationExpired(false);
+        user.setActivationTimestamp(new Date());
+        user.setProfilePicture(null);
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(1L);
+        accommodation.setTitle("accommodation");
+        accommodation.setDescription("long description");
+        accommodation.setShortDescription("description");
+        accommodation.setOwner_id(user.getId());
+        accommodation.setAmenities(new ArrayList<Amenity>());
+        accommodation.setImages(new ArrayList<Image>());
+        accommodation.setAvailabilities(new ArrayList<Availability>());
+        accommodation.setAddress(null);
+        accommodation.setPrices(new ArrayList<Price>());
+        accommodation.setRatings(new ArrayList<AccommodationRating>());
+        accommodation.setComments(new ArrayList<AccommodationComment>());
+        accommodation.setDeadline(0);
+        accommodation.setMin_capacity(1);
+        accommodation.setMax_capacity(10);
+        accommodation.setType(AccommodationType.ROOM);
         CreatePriceDTO createPriceDTO = new CreatePriceDTO();
         createPriceDTO.setCost(150.0);
-        createPriceDTO.setFromDate(new Date());
-        createPriceDTO.setToDate(new Date());
+        createPriceDTO.setFromDate(Date.from(Instant.now().plus(10, ChronoUnit.DAYS)));
+        createPriceDTO.setToDate(Date.from(Instant.now().plus(15, ChronoUnit.DAYS)));
         createPriceDTO.setType(PriceType.PER_GUEST);
 
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
-        updateAvailabilityDTO.setStartDate(new Date());
+        updateAvailabilityDTO.setStartDate(Date.from(Instant.now().plus(10, ChronoUnit.DAYS)));
+        updateAvailabilityDTO.setEndDate(Date.from(Instant.now().plus(15, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setEndDate(new Date());
         updateAvailabilityDTO.setPrice(createPriceDTO);
         updateAvailabilityDTO.setDeadline(-1);
 
-        assertNull(accommodationService.updateAvailability(existingAccommodationId, updateAvailabilityDTO));
-        verify(accommodationRepository).findById(existingAccommodationId);
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(accommodationRepository.findById(1L)).thenReturn(Optional.of(accommodation));
+
+        assertThrows(NegativeDeadlineException.class, () -> accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO));
+
+        verify(accommodationRepository).findById(accommodation.getId());
         verifyNoMoreInteractions(accommodationRepository);
         verifyNoInteractions(availabilityRepository);
         verifyNoInteractions(priceRepository);
@@ -215,21 +430,56 @@ public class AccommodationAvailabilityUpdatingTest {
     @Test
     @DisplayName("should not update availability, cost is negative")
     public void shouldNotUpdateAvailability_NegativeCost() throws Exception {
-        Long existingAccommodationId = 1L;
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setSurname("Doe");
+        user.setEmail("john@example.com");
+        user.setPassword("12345678");
+        user.setAddress("123 Main Street");
+        user.setPhone("1234567890");
+        user.setRole(Role.OWNER);
+        user.setLastPasswordResetDate(null);
+        user.setActivated(true);
+        user.setActivationExpired(false);
+        user.setActivationTimestamp(new Date());
+        user.setProfilePicture(null);
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(1L);
+        accommodation.setTitle("accommodation");
+        accommodation.setDescription("long description");
+        accommodation.setShortDescription("description");
+        accommodation.setOwner_id(user.getId());
+        accommodation.setAmenities(new ArrayList<Amenity>());
+        accommodation.setImages(new ArrayList<Image>());
+        accommodation.setAvailabilities(new ArrayList<Availability>());
+        accommodation.setAddress(null);
+        accommodation.setPrices(new ArrayList<Price>());
+        accommodation.setRatings(new ArrayList<AccommodationRating>());
+        accommodation.setComments(new ArrayList<AccommodationComment>());
+        accommodation.setDeadline(0);
+        accommodation.setMin_capacity(1);
+        accommodation.setMax_capacity(10);
+        accommodation.setType(AccommodationType.ROOM);
         CreatePriceDTO createPriceDTO = new CreatePriceDTO();
         createPriceDTO.setCost(-100.0);
-        createPriceDTO.setFromDate(new Date());
-        createPriceDTO.setToDate(new Date());
+        createPriceDTO.setFromDate(Date.from(Instant.now().plus(10, ChronoUnit.DAYS)));
+        createPriceDTO.setToDate(Date.from(Instant.now().plus(15, ChronoUnit.DAYS)));
         createPriceDTO.setType(PriceType.PER_GUEST);
 
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
-        updateAvailabilityDTO.setStartDate(new Date());
-        updateAvailabilityDTO.setEndDate(new Date());
+        updateAvailabilityDTO.setStartDate(Date.from(Instant.now().plus(10, ChronoUnit.DAYS)));
+        updateAvailabilityDTO.setEndDate(Date.from(Instant.now().plus(15, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setPrice(createPriceDTO);
         updateAvailabilityDTO.setDeadline(1);
 
-        assertNull(accommodationService.updateAvailability(existingAccommodationId, updateAvailabilityDTO));
-        verify(accommodationRepository).findById(existingAccommodationId);
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(accommodationRepository.findById(1L)).thenReturn(Optional.of(accommodation));
+
+        assertThrows(NegativeCostException.class, () -> accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO));
+
+        verify(accommodationRepository).findById(accommodation.getId());
         verifyNoMoreInteractions(accommodationRepository);
         verifyNoInteractions(availabilityRepository);
         verifyNoInteractions(priceRepository);
@@ -238,21 +488,56 @@ public class AccommodationAvailabilityUpdatingTest {
     @Test
     @DisplayName("should not update availability, price start date is in past")
     public void shouldNotUpdateAvailability_PriceStartDateInPast() throws Exception {
-        Long existingAccommodationId = 1L;
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setSurname("Doe");
+        user.setEmail("john@example.com");
+        user.setPassword("12345678");
+        user.setAddress("123 Main Street");
+        user.setPhone("1234567890");
+        user.setRole(Role.OWNER);
+        user.setLastPasswordResetDate(null);
+        user.setActivated(true);
+        user.setActivationExpired(false);
+        user.setActivationTimestamp(new Date());
+        user.setProfilePicture(null);
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(1L);
+        accommodation.setTitle("accommodation");
+        accommodation.setDescription("long description");
+        accommodation.setShortDescription("description");
+        accommodation.setOwner_id(user.getId());
+        accommodation.setAmenities(new ArrayList<Amenity>());
+        accommodation.setImages(new ArrayList<Image>());
+        accommodation.setAvailabilities(new ArrayList<Availability>());
+        accommodation.setAddress(null);
+        accommodation.setPrices(new ArrayList<Price>());
+        accommodation.setRatings(new ArrayList<AccommodationRating>());
+        accommodation.setComments(new ArrayList<AccommodationComment>());
+        accommodation.setDeadline(0);
+        accommodation.setMin_capacity(1);
+        accommodation.setMax_capacity(10);
+        accommodation.setType(AccommodationType.ROOM);
         CreatePriceDTO createPriceDTO = new CreatePriceDTO();
         createPriceDTO.setCost(100.0);
         createPriceDTO.setFromDate(Date.from(Instant.now().minus(30, ChronoUnit.DAYS)));
-        createPriceDTO.setToDate(new Date());
+        createPriceDTO.setToDate(Date.from(Instant.now().plus(5, ChronoUnit.DAYS)));
         createPriceDTO.setType(PriceType.PER_ACCOMMODATION);
 
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
-        updateAvailabilityDTO.setStartDate(new Date());
-        updateAvailabilityDTO.setEndDate(new Date());
+        updateAvailabilityDTO.setStartDate(Date.from(Instant.now().plus(5, ChronoUnit.DAYS)));
+        updateAvailabilityDTO.setEndDate(Date.from(Instant.now().plus(10, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setPrice(createPriceDTO);
         updateAvailabilityDTO.setDeadline(3);
 
-        assertNull(accommodationService.updateAvailability(existingAccommodationId, updateAvailabilityDTO));
-        verify(accommodationRepository).findById(existingAccommodationId);
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(accommodationRepository.findById(1L)).thenReturn(Optional.of(accommodation));
+
+        assertThrows(StartDateInPastException.class, () -> accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO));
+
+        verify(accommodationRepository).findById(accommodation.getId());
         verifyNoMoreInteractions(accommodationRepository);
         verifyNoInteractions(availabilityRepository);
         verifyNoInteractions(priceRepository);
@@ -261,21 +546,57 @@ public class AccommodationAvailabilityUpdatingTest {
     @Test
     @DisplayName("should not update availability, price end date is in past")
     public void shouldNotUpdateAvailability_PriceEndDateInPast() throws Exception {
-        Long existingAccommodationId = 1L;
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setSurname("Doe");
+        user.setEmail("john@example.com");
+        user.setPassword("12345678");
+        user.setAddress("123 Main Street");
+        user.setPhone("1234567890");
+        user.setRole(Role.OWNER);
+        user.setLastPasswordResetDate(null);
+        user.setActivated(true);
+        user.setActivationExpired(false);
+        user.setActivationTimestamp(new Date());
+        user.setProfilePicture(null);
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(1L);
+        accommodation.setTitle("accommodation");
+        accommodation.setDescription("long description");
+        accommodation.setShortDescription("description");
+        accommodation.setOwner_id(user.getId());
+        accommodation.setAmenities(new ArrayList<Amenity>());
+        accommodation.setImages(new ArrayList<Image>());
+        accommodation.setAvailabilities(new ArrayList<Availability>());
+        accommodation.setAddress(null);
+        accommodation.setPrices(new ArrayList<Price>());
+        accommodation.setRatings(new ArrayList<AccommodationRating>());
+        accommodation.setComments(new ArrayList<AccommodationComment>());
+        accommodation.setDeadline(0);
+        accommodation.setMin_capacity(1);
+        accommodation.setMax_capacity(10);
+        accommodation.setType(AccommodationType.ROOM);
+
         CreatePriceDTO createPriceDTO = new CreatePriceDTO();
         createPriceDTO.setCost(100.0);
-        createPriceDTO.setFromDate(new Date());
-        createPriceDTO.setFromDate(Date.from(Instant.now().minus(30, ChronoUnit.DAYS)));
+        createPriceDTO.setFromDate(Date.from(Instant.now().plus(5, ChronoUnit.DAYS)));
+        createPriceDTO.setToDate(Date.from(Instant.now().minus(30, ChronoUnit.DAYS)));
         createPriceDTO.setType(PriceType.PER_GUEST);
 
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
-        updateAvailabilityDTO.setStartDate(new Date());
-        updateAvailabilityDTO.setEndDate(new Date());
+        updateAvailabilityDTO.setStartDate(Date.from(Instant.now().plus(5, ChronoUnit.DAYS)));
+        updateAvailabilityDTO.setEndDate(Date.from(Instant.now().plus(10, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setPrice(createPriceDTO);
         updateAvailabilityDTO.setDeadline(3);
 
-        assertNull(accommodationService.updateAvailability(existingAccommodationId, updateAvailabilityDTO));
-        verify(accommodationRepository).findById(existingAccommodationId);
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(accommodationRepository.findById(1L)).thenReturn(Optional.of(accommodation));
+
+        assertThrows(EndDateInPastException.class, () -> accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO));
+
+        verify(accommodationRepository).findById(accommodation.getId());
         verifyNoMoreInteractions(accommodationRepository);
         verifyNoInteractions(availabilityRepository);
         verifyNoInteractions(priceRepository);
@@ -284,7 +605,38 @@ public class AccommodationAvailabilityUpdatingTest {
     @Test
     @DisplayName("should not update availability, both price dates are in past")
     public void shouldNotUpdateAvailability_BothPriceDatesInPast() throws Exception {
-        Long existingAccommodationId = 1L;
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setSurname("Doe");
+        user.setEmail("john@example.com");
+        user.setPassword("12345678");
+        user.setAddress("123 Main Street");
+        user.setPhone("1234567890");
+        user.setRole(Role.OWNER);
+        user.setLastPasswordResetDate(null);
+        user.setActivated(true);
+        user.setActivationExpired(false);
+        user.setActivationTimestamp(new Date());
+        user.setProfilePicture(null);
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(1L);
+        accommodation.setTitle("accommodation");
+        accommodation.setDescription("long description");
+        accommodation.setShortDescription("description");
+        accommodation.setOwner_id(user.getId());
+        accommodation.setAmenities(new ArrayList<Amenity>());
+        accommodation.setImages(new ArrayList<Image>());
+        accommodation.setAvailabilities(new ArrayList<Availability>());
+        accommodation.setAddress(null);
+        accommodation.setPrices(new ArrayList<Price>());
+        accommodation.setRatings(new ArrayList<AccommodationRating>());
+        accommodation.setComments(new ArrayList<AccommodationComment>());
+        accommodation.setDeadline(0);
+        accommodation.setMin_capacity(1);
+        accommodation.setMax_capacity(10);
+        accommodation.setType(AccommodationType.ROOM);
         CreatePriceDTO createPriceDTO = new CreatePriceDTO();
         createPriceDTO.setCost(150.0);
         createPriceDTO.setFromDate(Date.from(Instant.now().minus(30, ChronoUnit.DAYS)));
@@ -292,13 +644,18 @@ public class AccommodationAvailabilityUpdatingTest {
         createPriceDTO.setType(PriceType.PER_GUEST);
 
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
-        updateAvailabilityDTO.setStartDate(new Date());
-        updateAvailabilityDTO.setEndDate(new Date());
+        updateAvailabilityDTO.setStartDate(Date.from(Instant.now().plus(5, ChronoUnit.DAYS)));
+        updateAvailabilityDTO.setEndDate(Date.from(Instant.now().plus(10, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setPrice(createPriceDTO);
         updateAvailabilityDTO.setDeadline(3);
 
-        assertNull(accommodationService.updateAvailability(existingAccommodationId, updateAvailabilityDTO));
-        verify(accommodationRepository).findById(existingAccommodationId);
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(accommodationRepository.findById(1L)).thenReturn(Optional.of(accommodation));
+
+        assertThrows(BothDatesInPastException.class, () -> accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO));
+
+
+        verify(accommodationRepository).findById(accommodation.getId());
         verifyNoMoreInteractions(accommodationRepository);
         verifyNoInteractions(availabilityRepository);
         verifyNoInteractions(priceRepository);
@@ -307,21 +664,58 @@ public class AccommodationAvailabilityUpdatingTest {
     @Test
     @DisplayName("should not update availability, price end date is before start date")
     public void shouldNotUpdateAvailability_PriceEndDateBeforeStartDate() throws Exception {
-        Long existingAccommodationId = 1L;
+
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setSurname("Doe");
+        user.setEmail("john@example.com");
+        user.setPassword("12345678");
+        user.setAddress("123 Main Street");
+        user.setPhone("1234567890");
+        user.setRole(Role.OWNER);
+        user.setLastPasswordResetDate(null);
+        user.setActivated(true);
+        user.setActivationExpired(false);
+        user.setActivationTimestamp(new Date());
+        user.setProfilePicture(null);
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(1L);
+        accommodation.setTitle("accommodation");
+        accommodation.setDescription("long description");
+        accommodation.setShortDescription("description");
+        accommodation.setOwner_id(user.getId());
+        accommodation.setAmenities(new ArrayList<Amenity>());
+        accommodation.setImages(new ArrayList<Image>());
+        accommodation.setAvailabilities(new ArrayList<Availability>());
+        accommodation.setAddress(null);
+        accommodation.setPrices(new ArrayList<Price>());
+        accommodation.setRatings(new ArrayList<AccommodationRating>());
+        accommodation.setComments(new ArrayList<AccommodationComment>());
+        accommodation.setDeadline(0);
+        accommodation.setMin_capacity(1);
+        accommodation.setMax_capacity(10);
+        accommodation.setType(AccommodationType.ROOM);
+
         CreatePriceDTO createPriceDTO = new CreatePriceDTO();
         createPriceDTO.setCost(150.0);
-        createPriceDTO.setFromDate(Date.from(Instant.now().minus(15, ChronoUnit.DAYS)));
-        createPriceDTO.setToDate(Date.from(Instant.now().minus(30, ChronoUnit.DAYS)));
+        createPriceDTO.setFromDate(Date.from(Instant.now().plus(30, ChronoUnit.DAYS)));
+        createPriceDTO.setToDate(Date.from(Instant.now().plus(15, ChronoUnit.DAYS)));
         createPriceDTO.setType(PriceType.PER_GUEST);
 
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
-        updateAvailabilityDTO.setStartDate(new Date());
-        updateAvailabilityDTO.setEndDate(new Date());
+        updateAvailabilityDTO.setStartDate(Date.from(Instant.now().plus(15, ChronoUnit.DAYS)));
+        updateAvailabilityDTO.setEndDate(Date.from(Instant.now().plus(30, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setPrice(createPriceDTO);
         updateAvailabilityDTO.setDeadline(3);
 
-        assertNull(accommodationService.updateAvailability(existingAccommodationId, updateAvailabilityDTO));
-        verify(accommodationRepository).findById(existingAccommodationId);
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(accommodationRepository.findById(1L)).thenReturn(Optional.of(accommodation));
+
+        assertThrows(EndDateBeforeStartDateException.class, () -> accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO));
+
+        verify(accommodationRepository).findById(accommodation.getId());
         verifyNoMoreInteractions(accommodationRepository);
         verifyNoInteractions(availabilityRepository);
         verifyNoInteractions(priceRepository);
@@ -330,21 +724,58 @@ public class AccommodationAvailabilityUpdatingTest {
     @Test
     @DisplayName("should not update availability, price type is null")
     public void shouldNotUpdateAvailability_PriceTypeNull() throws Exception {
-        Long existingAccommodationId = 1L;
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setSurname("Doe");
+        user.setEmail("john@example.com");
+        user.setPassword("12345678");
+        user.setAddress("123 Main Street");
+        user.setPhone("1234567890");
+        user.setRole(Role.OWNER);
+        user.setLastPasswordResetDate(null);
+        user.setActivated(true);
+        user.setActivationExpired(false);
+        user.setActivationTimestamp(new Date());
+        user.setProfilePicture(null);
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(1L);
+        accommodation.setTitle("accommodation");
+        accommodation.setDescription("long description");
+        accommodation.setShortDescription("description");
+        accommodation.setOwner_id(user.getId());
+        accommodation.setAmenities(new ArrayList<Amenity>());
+        accommodation.setImages(new ArrayList<Image>());
+        accommodation.setAvailabilities(new ArrayList<Availability>());
+        accommodation.setAddress(null);
+        accommodation.setPrices(new ArrayList<Price>());
+        accommodation.setRatings(new ArrayList<AccommodationRating>());
+        accommodation.setComments(new ArrayList<AccommodationComment>());
+        accommodation.setDeadline(0);
+        accommodation.setMin_capacity(1);
+        accommodation.setMax_capacity(10);
+        accommodation.setType(AccommodationType.ROOM);
+
         CreatePriceDTO createPriceDTO = new CreatePriceDTO();
         createPriceDTO.setCost(150.0);
-        createPriceDTO.setFromDate(new Date());
-        createPriceDTO.setToDate(new Date());
+        createPriceDTO.setFromDate(Date.from(Instant.now().plus(5, ChronoUnit.DAYS)));
+        createPriceDTO.setToDate(Date.from(Instant.now().plus(10, ChronoUnit.DAYS)));
         createPriceDTO.setType(null);
 
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
-        updateAvailabilityDTO.setStartDate(new Date());
-        updateAvailabilityDTO.setEndDate(new Date());
+        updateAvailabilityDTO.setStartDate(Date.from(Instant.now().plus(5, ChronoUnit.DAYS)));
+        updateAvailabilityDTO.setEndDate(Date.from(Instant.now().plus(5, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setPrice(createPriceDTO);
         updateAvailabilityDTO.setDeadline(3);
 
-        assertNull(accommodationService.updateAvailability(existingAccommodationId, updateAvailabilityDTO));
-        verify(accommodationRepository).findById(existingAccommodationId);
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(accommodationRepository.findById(1L)).thenReturn(Optional.of(accommodation));
+
+        assertThrows(PriceTypeNullException.class, () -> accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO));
+
+
+        verify(accommodationRepository).findById(accommodation.getId());
         verifyNoMoreInteractions(accommodationRepository);
         verifyNoInteractions(availabilityRepository);
         verifyNoInteractions(priceRepository);
@@ -353,19 +784,77 @@ public class AccommodationAvailabilityUpdatingTest {
     @Test
     @DisplayName("should not update availability, there are currently active reservations")
     public void shouldNotUpdateAvailability_hasCurrentlyActiveReservations() throws Exception {
-        Long existingAccommodationId = 3L;
         String startDateString = "2024-03-21";
         String endDateString = "2024-03-24";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String reservationEndDateString = "2024-03-26";
+        String reservationStartDateString = "2024-03-19";
+        String reservationToTimeString = "2024-03-26 17:45:00";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date startDate = sdf.parse(startDateString);
         Date endDate = sdf.parse(endDateString);
         System.out.println("Start date: " + startDate);
         System.out.println("End date: " + endDate);
+
+        User user = new User();
+        user.setId(3L);
+        user.setName("John");
+        user.setSurname("Doe");
+        user.setEmail("john@example.com");
+        user.setPassword("12345678");
+        user.setAddress("123 Main Street");
+        user.setPhone("1234567890");
+        user.setRole(Role.OWNER);
+        user.setLastPasswordResetDate(null);
+        user.setActivated(true);
+        user.setActivationExpired(false);
+        user.setActivationTimestamp(new Date());
+        user.setProfilePicture(null);
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(3L);
+        accommodation.setTitle("accommodation");
+        accommodation.setDescription("long description");
+        accommodation.setShortDescription("description");
+        accommodation.setOwner_id(user.getId());
+        accommodation.setAmenities(new ArrayList<Amenity>());
+        accommodation.setImages(new ArrayList<Image>());
+        accommodation.setAvailabilities(new ArrayList<Availability>());
+        accommodation.setAddress(null);
+        accommodation.setPrices(new ArrayList<Price>());
+        accommodation.setRatings(new ArrayList<AccommodationRating>());
+        accommodation.setComments(new ArrayList<AccommodationComment>());
+        accommodation.setDeadline(0);
+        accommodation.setMin_capacity(1);
+        accommodation.setMax_capacity(10);
+        accommodation.setType(AccommodationType.ROOM);
+
+        Mockito.when(userRepository.findById(3L)).thenReturn(Optional.of(user));
+        Mockito.when(accommodationRepository.findById(3L)).thenReturn(Optional.of(accommodation));
+
+        Reservation reservation = new Reservation();
+        reservation.setId(1L);
+        reservation.setGuestId(user.getId());
+        reservation.setAccommodation(accommodation);
+        reservation.setFromDate(reservationStartDateString);
+        reservation.setToDate(reservationEndDateString);
+        reservation.setNumberOfGuests(4);
+        reservation.setRequestStatus(ReservationRequestStatus.ACCEPTED);
+        reservation.setStatus(ReservationStatus.ACCEPTED);
+        reservation.setDeleted(false);
+        reservation.setPrice(200.0);
+        reservation.setToTime(reservationToTimeString);
+
+        Mockito.when(reservationRepository.findCurrentlyActiveReservationsForAccommodation(3L, startDate, endDate))
+                .thenReturn(Collections.singletonList(reservation));
+
+
         CreatePriceDTO createPriceDTO = new CreatePriceDTO();
         createPriceDTO.setCost(150.0);
         createPriceDTO.setFromDate(startDate);
         createPriceDTO.setToDate(endDate);
         createPriceDTO.setType(PriceType.PER_GUEST);
+
+
 
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
         updateAvailabilityDTO.setStartDate(startDate);
@@ -373,14 +862,18 @@ public class AccommodationAvailabilityUpdatingTest {
         updateAvailabilityDTO.setPrice(createPriceDTO);
         updateAvailabilityDTO.setDeadline(3);
 
-        when(reservationRepository.findCurrentlyActiveReservationsForAccommodation(existingAccommodationId, startDate, endDate)).thenReturn(
-                Collections.singletonList(mock(Reservation.class))
-        );
+        System.out.println("Start date: " + startDate);
+        System.out.println("End date: " + endDate);
 
 
 
-        assertNull(accommodationService.updateAvailability(existingAccommodationId, updateAvailabilityDTO));
-        verify(accommodationRepository).findById(existingAccommodationId);
+
+
+        assertThrows(HasCurrentlyActiveReservationsException.class, () -> accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO));
+
+
+        verify(accommodationRepository).findById(accommodation.getId());
+        verify(reservationRepository).findCurrentlyActiveReservationsForAccommodation(3L, startDate, endDate);
         verifyNoMoreInteractions(accommodationRepository);
         verifyNoInteractions(availabilityRepository);
         verifyNoInteractions(priceRepository);
@@ -388,17 +881,53 @@ public class AccommodationAvailabilityUpdatingTest {
     }
 
     @Test
-    @DisplayName("should not update reservation, price is null")
+    @DisplayName("should not update availability, price is null")
     public void shouldNotUpdateAvailability_PriceNull() throws Exception {
-        Long existingAccommodationId = 1L;
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setSurname("Doe");
+        user.setEmail("john@example.com");
+        user.setPassword("12345678");
+        user.setAddress("123 Main Street");
+        user.setPhone("1234567890");
+        user.setRole(Role.OWNER);
+        user.setLastPasswordResetDate(null);
+        user.setActivated(true);
+        user.setActivationExpired(false);
+        user.setActivationTimestamp(new Date());
+        user.setProfilePicture(null);
+
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(1L);
+        accommodation.setTitle("accommodation");
+        accommodation.setDescription("long description");
+        accommodation.setShortDescription("description");
+        accommodation.setOwner_id(user.getId());
+        accommodation.setAmenities(new ArrayList<Amenity>());
+        accommodation.setImages(new ArrayList<Image>());
+        accommodation.setAvailabilities(new ArrayList<Availability>());
+        accommodation.setAddress(null);
+        accommodation.setPrices(new ArrayList<Price>());
+        accommodation.setRatings(new ArrayList<AccommodationRating>());
+        accommodation.setComments(new ArrayList<AccommodationComment>());
+        accommodation.setDeadline(0);
+        accommodation.setMin_capacity(1);
+        accommodation.setMax_capacity(10);
+        accommodation.setType(AccommodationType.ROOM);
+
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
-        updateAvailabilityDTO.setStartDate(new Date());
-        updateAvailabilityDTO.setEndDate(new Date());
+        updateAvailabilityDTO.setStartDate(Date.from(Instant.now().plus(5, ChronoUnit.DAYS)));
+        updateAvailabilityDTO.setEndDate(Date.from(Instant.now().plus(10, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setDeadline(3);
         updateAvailabilityDTO.setPrice(null);
 
-        assertNull(accommodationService.updateAvailability(existingAccommodationId, updateAvailabilityDTO));
-        verify(accommodationRepository).findById(existingAccommodationId);
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(accommodationRepository.findById(1L)).thenReturn(Optional.of(accommodation));
+
+        assertThrows(PriceNullException.class, () -> accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO));
+
+        verify(accommodationRepository).findById(accommodation.getId());
         verifyNoMoreInteractions(accommodationRepository);
         verifyNoInteractions(availabilityRepository);
         verifyNoInteractions(priceRepository);
@@ -407,43 +936,69 @@ public class AccommodationAvailabilityUpdatingTest {
     @Test
     @DisplayName("should update availability")
     public void shouldUpdateAvailability() throws Exception {
-        Accommodation accommodation = new Accommodation(123L, "accommodation", "long description",
-                "short description", 2L, new ArrayList<Amenity>(), new ArrayList<Image>(),
-                new ArrayList<Availability>(), null, new ArrayList<Price>(), new ArrayList<AccommodationRating>(),
-                new ArrayList<AccommodationComment>(), 3, 1, 10, AccommodationType.ROOM, true, false);
 
-        when(accommodationRepository.save(Mockito.any(Accommodation.class))).thenReturn(accommodation);
-        when(accommodationRepository.findById(123L)).thenReturn(Optional.of(accommodation));
+        User user = new User();
+        user.setId(1L);
+        user.setName("John");
+        user.setSurname("Doe");
+        user.setEmail("john@example.com");
+        user.setPassword("12345678");
+        user.setAddress("123 Main Street");
+        user.setPhone("1234567890");
+        user.setRole(Role.OWNER);
+        user.setLastPasswordResetDate(null);
+        user.setActivated(true);
+        user.setActivationExpired(false);
+        user.setActivationTimestamp(new Date());
+        user.setProfilePicture(null);
 
+        Accommodation accommodation = new Accommodation();
+        accommodation.setId(1L);
+        accommodation.setTitle("accommodation");
+        accommodation.setDescription("long description");
+        accommodation.setShortDescription("description");
+        accommodation.setOwner_id(user.getId());
+        accommodation.setAmenities(new ArrayList<Amenity>());
+        accommodation.setImages(new ArrayList<Image>());
+        accommodation.setAvailabilities(new ArrayList<Availability>());
+        accommodation.setAddress(null);
+        accommodation.setPrices(new ArrayList<Price>());
+        accommodation.setRatings(new ArrayList<AccommodationRating>());
+        accommodation.setComments(new ArrayList<AccommodationComment>());
+        accommodation.setDeadline(0);
+        accommodation.setMin_capacity(1);
+        accommodation.setMax_capacity(10);
+        accommodation.setType(AccommodationType.ROOM);
 
-        Long accommodationId = 123L;
         CreatePriceDTO createPriceDTO = new CreatePriceDTO();
         createPriceDTO.setCost(150.0);
-        createPriceDTO.setFromDate(new Date());
-        createPriceDTO.setToDate(new Date());
+        createPriceDTO.setFromDate(Date.from(Instant.now().plus(5, ChronoUnit.DAYS)));
+        createPriceDTO.setToDate(Date.from(Instant.now().plus(10, ChronoUnit.DAYS)));
         createPriceDTO.setType(PriceType.PER_GUEST);
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
-        updateAvailabilityDTO.setStartDate(new Date());
-        updateAvailabilityDTO.setEndDate(new Date());
+        updateAvailabilityDTO.setStartDate(Date.from(Instant.now().plus(5, ChronoUnit.DAYS)));
+        updateAvailabilityDTO.setEndDate(Date.from(Instant.now().plus(10, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setPrice(createPriceDTO);
         updateAvailabilityDTO.setDeadline(3);
 
-        Mockito.when(accommodationRepository.findById(accommodationId)).thenReturn(Optional.of(accommodation));
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        Mockito.when(accommodationRepository.findById(1L)).thenReturn(Optional.of(accommodation));
         List<Availability> current = accommodation.getAvailabilities();
         System.out.println(current);
         List<Price> currentPrices = accommodation.getPrices();
         System.out.println(currentPrices);
 
-        Accommodation result = accommodationService.updateAvailability(accommodationId, updateAvailabilityDTO);
+        AccommodationUpdatedAvailabilityDTO result = accommodationService.updateAvailability(accommodation.getId(), updateAvailabilityDTO);
         System.out.println(result);
         List<Availability> availabilities = accommodation.getAvailabilities();
         System.out.println(availabilities);
         List<Price> prices = result.getPrices();
 
         assertThat(result).isNotNull();
+        verify(accommodationRepository).findById(accommodation.getId());
         assertThat(current.size() + 1).isEqualTo(availabilities.size());
         assertThat(currentPrices.size() + 1).isEqualTo(prices.size());
-        verify(accommodationRepository, times(2)).save(accommodationArgumentCaptor.capture());
+
 
 
     }

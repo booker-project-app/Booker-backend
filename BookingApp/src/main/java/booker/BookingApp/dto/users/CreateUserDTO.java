@@ -24,15 +24,16 @@ public @Data class CreateUserDTO {
     public String phone;
     @NotNull
     public Role role;
+    public String activationLink;
 
     public CreateUserDTO() {
     }
 
     public CreateUserDTO(User user) {
-        this(user.getName(), user.getSurname(), user.getEmail(), user.getPassword(), user.getAddress(), user.getPhone(), user.getRole());
+        this(user.getName(), user.getSurname(), user.getEmail(), user.getPassword(), user.getAddress(), user.getPhone(), user.getRole(), user.getActivationLink());
     }
 
-    public CreateUserDTO(String name, String surname, String email, String password, String address, String phone, Role role) {
+    public CreateUserDTO(String name, String surname, String email, String password, String address, String phone, Role role, String activationLink) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -40,6 +41,7 @@ public @Data class CreateUserDTO {
         this.address = address;
         this.phone = phone;
         this.role = role;
+        this.activationLink = activationLink;
     }
 
 }

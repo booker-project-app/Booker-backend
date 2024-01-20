@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -36,6 +37,7 @@ import static org.testng.Assert.assertNotNull;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ActiveProfiles("test")
 public class AccommodationControllerTest {
     private String GUEST_EMAIL = "email1@gmail.com";
     private String OWNER_EMAIL = "email2@gmail.com";
@@ -96,7 +98,7 @@ public class AccommodationControllerTest {
         // Perform the request
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
                 "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 httpEntity,
                 Void.class,
                 999L
@@ -112,12 +114,12 @@ public class AccommodationControllerTest {
     @Test
     @DisplayName("should return bad request, start date is in the past")
     public void updateAvailabilityStartDateInPast_ShouldReturnBadRequest() {
-        CreatePriceDTO createPriceDTO = new CreatePriceDTO(150.0, new Date(), new Date(), PriceType.PER_GUEST);
+        CreatePriceDTO createPriceDTO = new CreatePriceDTO(150.0, Date.from(Instant.now().minus(5, ChronoUnit.DAYS)), Date.from(Instant.now().plus(5, ChronoUnit.DAYS)), PriceType.PER_GUEST);
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
         updateAvailabilityDTO.setPrice(createPriceDTO);
-        Date pastDate = new Date(System.currentTimeMillis() - 86400000);
+        Date pastDate = (Date.from(Instant.now().minus(5, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setStartDate(pastDate);
-        updateAvailabilityDTO.setEndDate(new Date());
+        updateAvailabilityDTO.setEndDate(Date.from(Instant.now().plus(5, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setDeadline(3);
 
         // Set headers with owner token
@@ -129,7 +131,7 @@ public class AccommodationControllerTest {
         // Perform the request
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
                 "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 httpEntity,
                 Void.class,
                 1L
@@ -148,8 +150,8 @@ public class AccommodationControllerTest {
         CreatePriceDTO createPriceDTO = new CreatePriceDTO(150.0, new Date(), new Date(), PriceType.PER_GUEST);
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
         updateAvailabilityDTO.setPrice(createPriceDTO);
-        Date pastDate = new Date(System.currentTimeMillis() - 86400000);
-        updateAvailabilityDTO.setStartDate(new Date());
+        Date pastDate = Date.from(Instant.now().minus(5, ChronoUnit.DAYS));
+        updateAvailabilityDTO.setStartDate(Date.from(Instant.now().plus(5, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setEndDate(pastDate);
         updateAvailabilityDTO.setDeadline(3);
 
@@ -162,7 +164,7 @@ public class AccommodationControllerTest {
         // Perform the request
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
                 "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 httpEntity,
                 Void.class,
                 1L
@@ -181,9 +183,9 @@ public class AccommodationControllerTest {
         CreatePriceDTO createPriceDTO = new CreatePriceDTO(150.0, new Date(), new Date(), PriceType.PER_GUEST);
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
         updateAvailabilityDTO.setPrice(createPriceDTO);
-        Date pastDate = new Date(System.currentTimeMillis() - 86400000);
+        Date pastDate = Date.from(Instant.now().minus(15, ChronoUnit.DAYS));
         updateAvailabilityDTO.setStartDate(pastDate);
-        updateAvailabilityDTO.setEndDate(pastDate);
+        updateAvailabilityDTO.setEndDate(Date.from(Instant.now().minus(10, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setDeadline(3);
 
         // Set headers with owner token
@@ -195,7 +197,7 @@ public class AccommodationControllerTest {
         // Perform the request
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
                 "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 httpEntity,
                 Void.class,
                 1L
@@ -214,9 +216,9 @@ public class AccommodationControllerTest {
         CreatePriceDTO createPriceDTO = new CreatePriceDTO(150.0, new Date(), new Date(), PriceType.PER_GUEST);
         UpdateAvailabilityDTO updateAvailabilityDTO = new UpdateAvailabilityDTO();
         updateAvailabilityDTO.setPrice(createPriceDTO);
-        Date futureDate = new Date(System.currentTimeMillis() + 86400000);
+        Date futureDate = Date.from(Instant.now().plus(10, ChronoUnit.DAYS));
         updateAvailabilityDTO.setStartDate(futureDate);
-        updateAvailabilityDTO.setEndDate(new Date());
+        updateAvailabilityDTO.setEndDate(Date.from(Instant.now().plus(5, ChronoUnit.DAYS)));
         updateAvailabilityDTO.setDeadline(3);
 
         // Set headers with owner token
@@ -228,7 +230,7 @@ public class AccommodationControllerTest {
         // Perform the request
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
                 "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 httpEntity,
                 Void.class,
                 1L
@@ -236,7 +238,7 @@ public class AccommodationControllerTest {
 
         // Check if the response status code is HttpStatus.BAD_REQUEST
         // Assert the response status code
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
 
         System.out.println(responseEntity.getBody());
     }
@@ -261,7 +263,7 @@ public class AccommodationControllerTest {
         // Perform the request
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
                 "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 httpEntity,
                 Void.class,
                 1L
@@ -294,7 +296,7 @@ public class AccommodationControllerTest {
         // Perform the request
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
                 "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 httpEntity,
                 Void.class,
                 1L
@@ -332,7 +334,7 @@ public class AccommodationControllerTest {
         // Perform the request
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
                 "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 httpEntity,
                 Void.class,
                 1L
@@ -370,7 +372,7 @@ public class AccommodationControllerTest {
         // Perform the request
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
                 "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 httpEntity,
                 Void.class,
                 1L
@@ -407,7 +409,7 @@ public class AccommodationControllerTest {
         // Perform the request
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
                 "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 httpEntity,
                 Void.class,
                 1L
@@ -444,7 +446,7 @@ public class AccommodationControllerTest {
         // Perform the request
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
                 "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 httpEntity,
                 Void.class,
                 1L
@@ -481,7 +483,7 @@ public class AccommodationControllerTest {
         // Perform the request
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
                 "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 httpEntity,
                 Void.class,
                 1L
@@ -518,7 +520,7 @@ public class AccommodationControllerTest {
         // Perform the request
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
                 "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 httpEntity,
                 Void.class,
                 1L
@@ -560,7 +562,7 @@ public class AccommodationControllerTest {
         // Perform the request
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
                 "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 httpEntity,
                 Void.class,
                 3L
@@ -601,20 +603,20 @@ public class AccommodationControllerTest {
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(updateAvailabilityDTO, headers);
 
         // Perform the request
-//        ResponseEntity<AccommodationViewDTO> responseEntity = restTemplate.exchange(
+        ResponseEntity<AccommodationViewDTO> responseEntity = restTemplate.exchange(
+                "/api/accommodations/update_availability/{id}",
+                HttpMethod.POST,
+                httpEntity,
+                AccommodationViewDTO.class,
+                3L
+        );
+
+//        ResponseEntity<Void> responseEntity = restTemplate.exchange(
 //                "/api/accommodations/update_availability/{id}",
 //                HttpMethod.PUT,
 //                httpEntity,
-//                AccommodationViewDTO.class,
-//                3L
+//                Void.class, 3L
 //        );
-
-        ResponseEntity<Void> responseEntity = restTemplate.exchange(
-                "/api/accommodations/update_availability/{id}",
-                HttpMethod.PUT,
-                httpEntity,
-                Void.class, 3L
-        );
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 

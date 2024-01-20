@@ -3,6 +3,7 @@ package booker.BookingApp.service.implementation;
 import booker.BookingApp.dto.accommodation.*;
 import booker.BookingApp.enums.AccommodationType;
 import booker.BookingApp.enums.PriceType;
+import booker.BookingApp.exceptions.*;
 import booker.BookingApp.model.accommodation.*;
 import booker.BookingApp.model.requestsAndReservations.Reservation;
 import booker.BookingApp.model.users.Owner;
@@ -390,25 +391,70 @@ public class AccommodationService implements IAccommodationService {
     }
 
     @Override
-    public Accommodation updateAvailability(Long accommodationId, UpdateAvailabilityDTO updateAvailabilityDTO) throws Exception{
+    public AccommodationUpdatedAvailabilityDTO updateAvailability(Long accommodationId, UpdateAvailabilityDTO updateAvailabilityDTO) throws Exception{
         Accommodation accommodation = repository.findById(accommodationId).orElse(null);
         if (accommodation == null) {
             return null;
         }
 
+        List<Reservation> currentlyActive = reservationRepository.findCurrentlyActiveReservationsForAccommodation(accommodationId, updateAvailabilityDTO.getStartDate(), updateAvailabilityDTO.getEndDate());
 
+        if (!currentlyActive.isEmpty()) {
+            throw new HasCurrentlyActiveReservationsException("This accommodation has active reservations in this period!");
+        }
+        if (updateAvailabilityDTO.getDeadline() < 0) {
+            throw new NegativeDeadlineException("Deadline is negative!");
+        }
+        if (updateAvailabilityDTO.getStartDate().before(new Date()) && updateAvailabilityDTO.getEndDate().before(new Date())) {
+            throw new BothDatesInPastException("Both dates in past!");
+        }
+        if (updateAvailabilityDTO.getStartDate().before(new Date())) {
+            throw new StartDateInPastException("Start date is in past!");
+        }
 
-        repository.save(accommodation);
+        if (updateAvailabilityDTO.getEndDate().before(new Date())) {
+            throw new EndDateInPastException("End date is in past!");
+        }
+
+        if (updateAvailabilityDTO.getEndDate().before(updateAvailabilityDTO.getStartDate())) {
+            throw new EndDateBeforeStartDateException("Start date is before end date!");
+        }
+
+        if (updateAvailabilityDTO.getPrice() == null) {
+            throw new PriceNullException("Price is null");
+        }
+
+        if (updateAvailabilityDTO.getPrice().getCost() < 0) {
+            throw new NegativeCostException("Cost is negative!");
+        }
+
+        if (updateAvailabilityDTO.getPrice().getFromDate().before(new Date()) && updateAvailabilityDTO.getPrice().getToDate().before(new Date())) {
+            throw new BothDatesInPastException("Both price dates are in past!");
+        }
+
+        if (updateAvailabilityDTO.getPrice().getFromDate().before(new Date())) {
+            throw new StartDateInPastException("Price start day is in past!");
+        }
+
+        if (updateAvailabilityDTO.getPrice().getToDate().before(new Date())) {
+            throw new EndDateInPastException("Price end date in past!");
+        }
+
+        if (updateAvailabilityDTO.getPrice().getToDate().before(updateAvailabilityDTO.getPrice().getFromDate())) {
+            throw new EndDateBeforeStartDateException("Price end date is before price start date!");
+        }
+
+        if (updateAvailabilityDTO.getPrice().getType() == null) {
+            throw new PriceTypeNullException("Price type is null!");
+        }
+
 
         Availability availability = new Availability();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 //        Date startDate = simpleDateFormat.parse(updateAvailabilityDTO.getStartDate());
 //        Date endDate = simpleDateFormat.parse(updateAvailabilityDTO.getEndDate());
-        List<Reservation> reservations = reservationRepository.findAllForAccommodation(accommodationId);
-        List<Reservation> currentlyActive = reservationRepository.findCurrentlyActiveReservationsForAccommodation(accommodationId, updateAvailabilityDTO.getStartDate(), updateAvailabilityDTO.getEndDate());
-        if (!currentlyActive.isEmpty()) {
-            throw new RuntimeException("This accommodation has active reservations in this period!");
-        }
+//        List<Reservation> reservations = reservationRepository.findAllForAccommodation(accommodationId);
+
         availability.setStartDate(updateAvailabilityDTO.getStartDate());
         availability.setEndDate(updateAvailabilityDTO.getEndDate());
         availability.setAccommodation(accommodation);
@@ -427,8 +473,16 @@ public class AccommodationService implements IAccommodationService {
         priceRepository.saveAll(prices);
         accommodation.setPrices(prices);
         accommodation.setDeadline(updateAvailabilityDTO.getDeadline());
+
+
         repository.save(accommodation);
-        return accommodation;
+
+
+
+
+
+        AccommodationUpdatedAvailabilityDTO dto = AccommodationUpdatedAvailabilityDTO.createFromAccommodation(accommodation);
+        return dto;
     }
 
     @Override

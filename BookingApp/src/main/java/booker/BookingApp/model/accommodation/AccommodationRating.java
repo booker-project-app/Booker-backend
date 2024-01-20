@@ -4,11 +4,12 @@ import booker.BookingApp.model.users.Guest;
 import booker.BookingApp.model.users.User;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Entity
-public @Data class AccommodationRating {
+public @Data @NoArgsConstructor class AccommodationRating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
