@@ -386,21 +386,163 @@ public class AccommodationService implements IAccommodationService {
         if (!currentlyActive.isEmpty()) {
             throw new RuntimeException("This accommodation has active reservations in this period!");
         }
-        availability.setStartDate(updateAvailabilityDTO.getStartDate());
-        availability.setEndDate(updateAvailabilityDTO.getEndDate());
-        availability.setAccommodation(accommodation);
+
+
+        List<Availability> freeAvailabilities = availabilityRepository.findByAccommodationId(accommodationId);
+//        for (Availability old : freeAvailabilities) {
+//           if (updateAvailabilityDTO.getStartDate().after(old.getStartDate()) &&
+//                   updateAvailabilityDTO.getStartDate().before(old.getEndDate()) &&
+//                   updateAvailabilityDTO.getEndDate().before(old.getEndDate()) &&
+//                   updateAvailabilityDTO.getEndDate().after(old.getStartDate())) {
+//               old.setEndDate(updateAvailabilityDTO.getStartDate());
+//               Availability a2 = new Availability();
+//               a2.setAccommodation(accommodation);
+//               a2.setStartDate(updateAvailabilityDTO.getStartDate());
+//               a2.setEndDate(updateAvailabilityDTO.getEndDate());
+//               Availability a3 = new Availability();
+//               a3.setAccommodation(accommodation);
+//               a3.setStartDate(updateAvailabilityDTO.getEndDate());
+//               a3.setEndDate(old.getEndDate());
+//               availabilityRepository.save(old);
+//               availabilityRepository.save(a2);
+//               availabilityRepository.save(a3);
+//           }
+//
+//           if (updateAvailabilityDTO.getStartDate().after(old.getStartDate()) &&
+//           updateAvailabilityDTO.getStartDate().before(old.getEndDate()) &&
+//           updateAvailabilityDTO.getEndDate().after(old.getStartDate()) &&
+//           updateAvailabilityDTO.getEndDate().after(old.getEndDate())) {
+//               old.setEndDate(updateAvailabilityDTO.getStartDate());
+//               Availability a2 = new Availability();
+//               a2.setAccommodation(accommodation);
+//               a2.setStartDate(updateAvailabilityDTO.getStartDate());
+//               a2.setEndDate(updateAvailabilityDTO.getEndDate());
+//               availabilityRepository.save(old);
+//               availabilityRepository.save(a2);
+//           }
+
+
+//        }
+
         ArrayList<Availability> availabilities = new ArrayList<Availability>();
+
+        if (!freeAvailabilities.isEmpty()) {
+            for (Availability old : freeAvailabilities) {
+                System.out.println(old.toString());
+                if (old.getEndDate().equals(updateAvailabilityDTO.getStartDate())) {
+                    old.setEndDate(updateAvailabilityDTO.getEndDate());
+                    availabilityRepository.save(old);
+                    availabilities.add(old);
+                }
+
+                if (updateAvailabilityDTO.getEndDate().equals(old.getStartDate())) {
+                    old.setStartDate(updateAvailabilityDTO.getStartDate());
+                    availabilityRepository.save(old);
+                    availabilities.add(old);
+                }
+            }
+        } else {
+            availability.setAccommodation(accommodation);
+            availability.setStartDate(updateAvailabilityDTO.getStartDate());
+            availability.setEndDate(updateAvailabilityDTO.getEndDate());
+            availabilityRepository.save(availability);
+            availabilities.add(availability);
+        }
+
+
+
+
         availabilities.add(availability);
         availabilityRepository.saveAll(availabilities);
         accommodation.setAvailabilities(availabilities);
-        Price price = new Price();
-        price.setCost(updateAvailabilityDTO.getPrice().getCost());
-        price.setFromDate(updateAvailabilityDTO.getPrice().getFromDate());
-        price.setToDate(updateAvailabilityDTO.getPrice().getToDate());
-        price.setType(updateAvailabilityDTO.getPrice().getType());
-        price.setAccommodation(accommodation);
         ArrayList<Price> prices = new ArrayList<Price>();
-        prices.add(price);
+
+        Price price = new Price();
+        List<Price> currentPrices = priceRepository.findAllForAccommodation(accommodationId);
+        if (!currentPrices.isEmpty()) {
+            for(Price old : currentPrices) {
+                if (updateAvailabilityDTO.getPrice().getFromDate().after(old.getFromDate()) &&
+                updateAvailabilityDTO.getPrice().getFromDate().before(old.getToDate()) &&
+                updateAvailabilityDTO.getPrice().getToDate().before(old.getToDate()) &&
+                updateAvailabilityDTO.getPrice().getToDate().after(old.getFromDate())) {
+
+                    Price p2 = new Price();
+                    p2.setAccommodation(accommodation);
+                    p2.setFromDate(updateAvailabilityDTO.getPrice().getFromDate());
+                    p2.setToDate(updateAvailabilityDTO.getPrice().getToDate());
+                    p2.setCost(updateAvailabilityDTO.getPrice().getCost());
+                    p2.setType(updateAvailabilityDTO.getPrice().getType());
+                    Price p3 = new Price();
+                    p3.setAccommodation(accommodation);
+                    p3.setFromDate(updateAvailabilityDTO.getPrice().getToDate());
+                    p3.setToDate(old.getToDate());
+                    p3.setCost(old.getCost());
+                    p3.setType(old.getType());
+                    old.setToDate(updateAvailabilityDTO.getPrice().getFromDate());
+                    priceRepository.save(old);
+                    prices.add(p2);
+                    prices.add(p3);
+                }
+
+                if (updateAvailabilityDTO.getPrice().getFromDate().after(old.getFromDate()) &&
+                updateAvailabilityDTO.getPrice().getFromDate().before(old.getToDate()) &&
+                updateAvailabilityDTO.getPrice().getToDate().after(old.getToDate()) &&
+                old.getToDate().after(updateAvailabilityDTO.getPrice().getFromDate())) {
+
+                    Price p2 = new Price();
+                    p2.setAccommodation(accommodation);
+                    p2.setFromDate(updateAvailabilityDTO.getPrice().getFromDate());
+                    p2.setToDate(old.getToDate());
+                    p2.setCost(updateAvailabilityDTO.getPrice().getCost());
+                    p2.setType(updateAvailabilityDTO.getPrice().getType());
+                    old.setToDate(updateAvailabilityDTO.getStartDate());
+                    priceRepository.save(p2);
+                    priceRepository.save(old);
+                    prices.add(p2);
+                }
+
+                if (updateAvailabilityDTO.getPrice().getFromDate().before(old.getFromDate()) &&
+                old.getFromDate().before(updateAvailabilityDTO.getPrice().getToDate()) &&
+                updateAvailabilityDTO.getPrice().getFromDate().before(old.getToDate()) &&
+                updateAvailabilityDTO.getPrice().getToDate().before(old.getToDate())) {
+                    Price p2 = new Price();
+                    p2.setAccommodation(accommodation);
+                    p2.setCost(updateAvailabilityDTO.getPrice().getCost());
+                    p2.setType(updateAvailabilityDTO.getPrice().getType());
+                    p2.setFromDate(updateAvailabilityDTO.getPrice().getFromDate());
+                    p2.setToDate(old.getFromDate());
+                    old.setToDate(updateAvailabilityDTO.getPrice().getToDate());
+                    priceRepository.save(p2);
+                    priceRepository.save(old);
+                    prices.add(price);
+                }
+
+                if(updateAvailabilityDTO.getPrice().getFromDate().equals(old.getFromDate()) &&
+                updateAvailabilityDTO.getPrice().getToDate().equals(old.getToDate())) {
+                    old.setCost(updateAvailabilityDTO.getPrice().getCost());
+                    old.setType(updateAvailabilityDTO.getPrice().getType());
+                    priceRepository.save(old);
+                }
+
+                if (updateAvailabilityDTO.getPrice().getFromDate().before(old.getFromDate()) &&
+                old.getFromDate().before(updateAvailabilityDTO.getPrice().getToDate()) &&
+                old.getToDate().before(updateAvailabilityDTO.getPrice().getToDate())) {
+                    old.setFromDate(updateAvailabilityDTO.getPrice().getFromDate());
+                    old.setToDate(updateAvailabilityDTO.getPrice().getToDate());
+                    old.setType(updateAvailabilityDTO.price.getType());
+                    priceRepository.save(old);
+                }
+            }
+        } else {
+            price.setCost(updateAvailabilityDTO.getPrice().getCost());
+            price.setFromDate(updateAvailabilityDTO.getPrice().getFromDate());
+            price.setToDate(updateAvailabilityDTO.getPrice().getToDate());
+            price.setType(updateAvailabilityDTO.getPrice().getType());
+            price.setAccommodation(accommodation);
+            prices.add(price);
+        }
+
+
         priceRepository.saveAll(prices);
         accommodation.setPrices(prices);
         accommodation.setDeadline(updateAvailabilityDTO.getDeadline());
@@ -522,6 +664,8 @@ public class AccommodationService implements IAccommodationService {
         ArrayList<Long> ids = repository.findAllIds();
         return ids;
     }
+
+
 
 
 }

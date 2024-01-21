@@ -47,7 +47,7 @@ INSERT INTO Image(accommodation_id, path_front, path_mobile) VALUES (1, '../../a
 INSERT INTO Image(accommodation_id, path_front, path_mobile) VALUES (1, '../../assets/images/living-room.jpg', '../../../../../res/drawable/living-room.jpg');
 INSERT INTO Image(accommodation_id, path_front, path_mobile) VALUES (1, '../../assets/images/living-room.jpg', '../../../../../res/drawable/living-room.jpg');
 INSERT INTO Image(accommodation_id, path_front, path_mobile) VALUES (1, '../../assets/images/kitchen-2165756_640.jpg', '../../../../../res/drawable/kitchen-2165756_640.jpg');
-INSERT INTO Availability (start_date, end_date, accommodation_id) VALUES ('2024-10-03', '2024-01-10', 1);
+INSERT INTO Availability (start_date, end_date, accommodation_id) VALUES ('2024-01-03', '2024-01-15', 1);
 INSERT INTO Availability (start_date, end_date, accommodation_id) VALUES ('2024-02-15', '2024-02-28', 1);
 INSERT INTO Availability (start_date, end_date, accommodation_id) VALUES ('2024-03-20', '2024-04-05', 1);
 INSERT INTO Price (accommodation_id, cost, from_date, to_date, type) VALUES (1, 100.0, '2024-10-03', '2024-01-10', 0);

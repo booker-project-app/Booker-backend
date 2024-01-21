@@ -296,7 +296,7 @@ public class WebSecurityConfig {
                         antMatcher(HttpMethod.GET, "/sendMessageRest"),
                         antMatcher(HttpMethod.GET, "/api/accommodations/images/*"),
                         antMatcher(HttpMethod.PUT, "/api/accommodation_comments/approve/*"),
-                        antMatcher(HttpMethod.PUT, "/api/owner_comments/approve*"),
+                        antMatcher(HttpMethod.PUT, "/api/owner_comments/approve/*"),
                         antMatcher(HttpMethod.POST, "/api/report_user/add_report"),
                         antMatcher("/h2-console/**")
         );

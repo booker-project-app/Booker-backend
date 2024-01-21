@@ -23,4 +23,5 @@ public interface PriceRepository extends JpaRepository<Price, Long> {
 
     @Query(value="select p.cost from Accommodation a, Price p WHERE a.id=:accId AND p.accommodation.id=:accId AND :date BETWEEN p.fromDate AND p.toDate")
     public double findPriceForDate(@Param("accId") Long accId, @Param("date") Date date);
+
 }
