@@ -1,5 +1,7 @@
 package booker.BookingApp.e2e.student1.tests;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -8,7 +10,7 @@ import org.testng.annotations.BeforeSuite;
 
 import java.util.concurrent.TimeUnit;
 
-public class TestBase {
+public class TestBase extends AbstractTestNGSpringContextTests{
     public static WebDriver driver;
 
     @BeforeSuite

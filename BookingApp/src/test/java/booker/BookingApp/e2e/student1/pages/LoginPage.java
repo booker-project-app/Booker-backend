@@ -5,6 +5,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 public class LoginPage {
     private WebDriver driver;
@@ -12,6 +18,9 @@ public class LoginPage {
     private static final String EMAIL = "email2@gmail.com";
 
     private static final String PASSWORD = "12345678";
+
+    @FindBy(css = "div[class='login-container']")
+    private WebElement loginContainer;
 
     @FindBy(css = "input[id='emailField']")
     private WebElement emailField;
@@ -30,6 +39,7 @@ public class LoginPage {
     public void enterEmail() {
         emailField.sendKeys(EMAIL);
         emailField.sendKeys(Keys.ENTER);
+
     }
 
     public void enterPassword() {

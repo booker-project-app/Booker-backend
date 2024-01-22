@@ -236,7 +236,7 @@ public class AccommodationController {
     }
 
     //@PreAuthorize("hasAuthority('OWNER')")
-    @PutMapping(value = "/update_availability/{id}", consumes = "application/json")
+    @PostMapping(value = "/update_availability/{id}", consumes = "application/json")
     public ResponseEntity<AccommodationViewDTO> updateAvailability(@PathVariable Long id, @Valid @RequestBody UpdateAvailabilityDTO updateAvailabilityDTO) throws Exception {
         Accommodation accommodation = service.updateAvailability(id, updateAvailabilityDTO);
         if (accommodation == null) {
