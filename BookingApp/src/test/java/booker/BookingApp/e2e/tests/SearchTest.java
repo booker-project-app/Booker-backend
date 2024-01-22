@@ -5,8 +5,10 @@ import org.testng.annotations.Test;
 
 public class SearchTest  extends TestBase {
     @Test
-    public void clickSearchNotingInputted() {
-        HomePage home = new HomePage(driver);
-        home.clickSearch();
+    public void test() {
+        HomePage homePage = new HomePage(driver);
+        homePage.clickSearch();
+
+
     }
 }

@@ -6,12 +6,12 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class HomePage {
-    private final WebDriver driver;
+    private WebDriver driver;
 
     private static final String PAGE_URL = "http://localhost:4200/home";
 
-    @FindBy(css = "button[class='search-button']")
-    private WebElement searchBtn;
+    @FindBy(css = "input.search-button")
+    private WebElement searcBtn;
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
@@ -20,6 +20,6 @@ public class HomePage {
     }
 
     public void clickSearch() {
-        searchBtn.click();
+        searcBtn.click();
     }
 }
