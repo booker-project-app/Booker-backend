@@ -10,7 +10,7 @@ import org.testng.annotations.BeforeSuite;
 
 import java.util.concurrent.TimeUnit;
 
-public class TestBase extends AbstractTestNGSpringContextTests{
+public class TestBase{
     public static WebDriver driver;
 
     @BeforeSuite

@@ -16,6 +16,8 @@ public class UpdateAvailabilityPage {
     private static final String AMOUNT = "150";
 
     private static final String DEADLINE = "3";
+    private static final String NEGATIVE_DEADLINE = "-10";
+    private static final String NEGATIVE_AMOUNT = "-100";
 
     @FindBy(css = "div[class='background'] > div[class='container'] > form:nth-child(2) > mat-vertical-stepper > div > div:nth-child(2) > div > div > form > mat-form-field > div > div:nth-child(2) > div > mat-datepicker-toggle > button")
     private WebElement availabilityDatesBtn;
@@ -83,14 +85,41 @@ public class UpdateAvailabilityPage {
      @FindBy(css = "div[id='buttons']")
      private WebElement buttonsDiv;
 
-     @FindBy(css = "button[id = submitBtn]")
+     @FindBy(css = "button[id = 'submitBtn']")
      private WebElement submitBtn;
+
+     @FindBy(css = "form[id='formGroupAvailability']")
+     private WebElement formGroupAvailability;
 
      @FindBy(css = "div[id='mat-snack-bar-container-live-1'] > div > simple-snack-bar > div")
      private WebElement snackBar;
 
      @FindBy(css = "div[id='mat-snack-bar-container-live-1']")
      private WebElement snackBarDiv;
+
+     @FindBy(xpath = "//mat-calendar[@id='mat-datepicker-0']/div/mat-month-view/table/tbody/tr[3]/td[2]/button/span[1]")
+     private WebElement availabilityStartDateUnsuccessful;
+
+     @FindBy(xpath = "//mat-calendar[@id='mat-datepicker-0']/div/mat-month-view/table/tbody/tr[3]/td[4]/button/span[1]")
+     private WebElement availabilityEndDateUnsuccessful;
+
+     @FindBy(xpath = "//mat-calendar[@id='mat-datepicker-1']/div/mat-month-view/table/tbody/tr[3]/td[2]/button/span[1]")
+     private WebElement priceStartDateUnsuccessful;
+
+     @FindBy(xpath = "//mat-calendar[@id='mat-datepicker-1']/div/mat-month-view/table/tbody/tr[3]/td[4]/button/span[1]")
+     private WebElement priceEndDateUnsuccessful;
+
+    @FindBy(css = "button[class = 'menu-toggle']")
+    private WebElement menuToggle;
+
+    @FindBy(css = "ul[id='menu']")
+    private WebElement showRightMenu;
+
+    @FindBy(css = "ul[id='menu'] > li:nth-child(9) > button")
+    private WebElement logoutBtn;
+
+    @FindBy(xpath = "//div[@id='cdk-overlay-2']/mat-snack-bar-container")
+    private WebElement snackBarContainer;
 
     //*[@id="mat-snack-bar-container-live-1"]/div/simple-snack-bar/div[1]
     //*[@id="mat-snack-bar-container-live-1"]/div/simple-snack-bar
@@ -168,8 +197,127 @@ public class UpdateAvailabilityPage {
 //        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         submitBtn.click();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOf(snackBarContainer));
    }
 
+    public void refreshPage() {
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.navigate().refresh();
+    }
 
+    public void logout() {
+        menuToggle.click();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOf(showRightMenu));
+        logoutBtn.click();
+    }
+
+    public void enterAvailabilityUnsuccessful() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOf(formGroupAvailability));
+        availabilityDatesBtn.click();
+        wait.until(ExpectedConditions.visibilityOf(datePickerAvailability));
+        nextMonth.click();
+        wait.until(ExpectedConditions.textToBePresentInElement(monthSpan, "FEB 2024"));
+        availabilityStartDateUnsuccessful.click();
+        availabilityEndDateUnsuccessful.click();
+        nextStepAvailability.click();
+    }
+
+    public void enterPriceDatesUnsuccessful() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOf(formGroupPrice));
+        datePickerPriceBtn.click();
+        wait.until(ExpectedConditions.visibilityOf(datePickerPrice));
+        priceNextMonth.click();
+        wait.until(ExpectedConditions.textToBePresentInElement(priceNextMonthSpan, "FEB 2024"));
+        priceStartDateUnsuccessful.click();
+        priceEndDateUnsuccessful.click();
+        priceAmount.clear();
+        priceAmount.sendKeys(AMOUNT);
+        rbPerAccommodation.click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        nextStepPrice.click();
+    }
+
+    public void enterDeadlineUnsuccessful() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOf(formGroupDeadline));
+        deadlineText.clear();
+        deadlineText.sendKeys(DEADLINE);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        nextStepDeadline.click();
+    }
+
+    public void submitDataUnsuccessful() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOf(buttonsDiv));
+        wait.until(ExpectedConditions.elementToBeClickable(submitBtn));
+//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        submitBtn.click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOf(snackBarContainer));
+
+    }
+
+    public void enterDeadlineNegative() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOf(formGroupDeadline));
+        deadlineText.clear();
+        deadlineText.sendKeys(NEGATIVE_DEADLINE);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        nextStepDeadline.click();
+    }
+
+    public void enterNegativePriceAmount() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOf(formGroupPrice));
+        datePickerPriceBtn.click();
+        wait.until(ExpectedConditions.visibilityOf(datePickerPrice));
+        priceNextMonth.click();
+        priceNextMonth.click();
+        priceNextMonth.click();
+        priceNextMonth.click();
+        priceNextMonth.click();
+        priceNextMonth.click();
+        priceNextMonth.click();
+        priceNextMonth.click();
+        priceNextMonth.click();
+        priceNextMonth.click();
+        priceNextMonth.click();
+        wait.until(ExpectedConditions.textToBePresentInElement(priceNextMonthSpan, "DEC 2024"));
+        priceStartDate.click();
+        priceEndDate.click();
+        priceAmount.clear();
+        priceAmount.sendKeys(NEGATIVE_AMOUNT);
+        rbPerAccommodation.click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        nextStepPrice.click();
+    }
+
+    public boolean checkSubmitButtonEnabled() {
+        if (submitBtn.isEnabled()) {
+            System.out.println("Submit button is enabled");
+            return true;
+        } else {
+            System.out.println("Submit button is disabled");
+            return false;
+        }
+    }
+
+    public void enterWithoutAvailability() {
+        nextStepAvailability.click();
+
+    }
+
+    public void enterPriceDetailsWithoutDates() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.visibilityOf(formGroupPrice));
+        priceAmount.clear();
+        priceAmount.sendKeys(AMOUNT);
+        rbPerAccommodation.click();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        nextStepPrice.click();
+    }
 
 }
