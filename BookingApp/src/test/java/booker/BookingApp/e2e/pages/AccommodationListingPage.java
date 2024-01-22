@@ -21,12 +21,30 @@ public class AccommodationListingPage {
 
     private WebDriver driver;
 
+    @FindBy(css = "input.search-button")
+    private WebElement searcBtn;
+
+    @FindBy(css = "#min_price")
+    private WebElement min_price;
+
+    @FindBy(css = "#max_price")
+    private WebElement max_price;
+
     @FindBy(css = "app-accommodation-card")
     private List<WebElement> accommodationCards;
+
+    @FindBy(css = ".filter-text")
+    private List<WebElement> amenitiesAndTypes;
 
 
     public AccommodationListingPage(WebDriver driver){
         this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
+
+    public AccommodationListingPage(WebDriver driver, String url){
+        this.driver = driver;
+        driver.get(url);
         PageFactory.initElements(driver, this);
     }
 
@@ -39,10 +57,35 @@ public class AccommodationListingPage {
 
     public List<String> getAllAccommodationNames() {
         ArrayList<String> names = new ArrayList<>();
+        accommodationCards = driver.findElements(By.cssSelector("app-accommodation-card"));
         for(WebElement card : accommodationCards) {
             String name = card.findElement(By.cssSelector("b")).getText();
             names.add(name);
         }
         return names;
+    }
+
+    public void clickOnAmenity(int index) {
+        WebElement amenity = amenitiesAndTypes.get(index);
+        WebElement checkBox = amenity.findElement(By.xpath("./.."));
+        checkBox.click();
+    }
+
+    public void clickOnSearch() {
+        searcBtn.click();
+    }
+
+    public void clickOnType(int index) {
+        WebElement amenity = amenitiesAndTypes.get(index+4); //because there are four amenities
+        WebElement checkBox = amenity.findElement(By.xpath("./.."));
+        checkBox.click();
+    }
+
+    public void enterMinPrice(String price) {
+        min_price.sendKeys(price);
+    }
+
+    public void enterMaxPrice(String price) {
+        max_price.sendKeys(price);
     }
 }
