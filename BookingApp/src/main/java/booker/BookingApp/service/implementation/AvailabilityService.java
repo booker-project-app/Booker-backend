@@ -3,6 +3,7 @@ package booker.BookingApp.service.implementation;
 import booker.BookingApp.dto.accommodation.AccommodationViewDTO;
 import booker.BookingApp.dto.accommodation.AvailabilityDTO;
 import booker.BookingApp.dto.requestsAndReservations.ReservationRequestDTO;
+import booker.BookingApp.enums.ReservationRequestStatus;
 import booker.BookingApp.model.accommodation.Accommodation;
 import booker.BookingApp.model.accommodation.Availability;
 import booker.BookingApp.repository.AccommodationRepository;
@@ -143,8 +144,12 @@ public class AvailabilityService implements IAvailabilityService {
             Date endA = sdf.parse(requestDTO.getToDate());
             Date startB = sdf.parse(acceptedRequest.getFromDate());
             Date endB = sdf.parse(acceptedRequest.getToDate());
-            // return true if overlap
-            return (endA.after(startB) && endA.before(endB)) || (startA.after(startB) && startA.before(endB));
+            if (requestDTO.getStatus() == ReservationRequestStatus.WAITING){
+                // return true if overlap
+                return (endA.after(startB) && endA.before(endB)) || (startA.after(startB) && startA.before(endB));
+            } else {
+                return false;
+            }
         } catch (ParseException e) {
             System.out.println(e);
             return false;

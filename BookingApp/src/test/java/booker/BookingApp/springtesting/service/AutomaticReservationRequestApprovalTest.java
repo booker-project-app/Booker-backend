@@ -52,7 +52,7 @@ public class AutomaticReservationRequestApprovalTest {
     ReservationRequestService service;
 
     @BeforeEach
-    public void initialize() throws ParseException {
+    public void initialize() {
         MockitoAnnotations.openMocks(this);
     }
 
