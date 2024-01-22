@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class SearchTest  extends TestBase {
 
     @Test
-    public void emptyLocation() throws InterruptedException {
+    public void emptyLocation() {
         HomePage homePage = new HomePage(driver);
         homePage.enterFromDate("3/22/2024");
         homePage.enterToDate("3/25/2024");
@@ -26,7 +26,7 @@ public class SearchTest  extends TestBase {
     }
 
     @Test
-    public void emptyDates() throws InterruptedException {
+    public void emptyDates() {
         HomePage homePage = new HomePage(driver);
         homePage.enterLocation("London");
         homePage.enterPeople("2");
@@ -49,6 +49,36 @@ public class SearchTest  extends TestBase {
         Alert alert = driver.switchTo().alert();
         String alertText = alert.getText();
         Assert.assertEquals(alertText, "Number of guests can not be less than 0!");
+        alert.accept();
+    }
+
+    @Test
+    public void pastDates() {
+        HomePage homePage = new HomePage(driver);
+        homePage.enterLocation("London");
+        homePage.enterFromDate("3/22/2023");
+        homePage.enterToDate("3/25/2023");
+        homePage.enterPeople("2");
+        homePage.clickSearch();
+
+        Alert alert = driver.switchTo().alert();
+        String alertText = alert.getText();
+        Assert.assertEquals(alertText, "You can not search past dates");
+        alert.accept();
+    }
+
+    @Test
+    public void endDateBeforeStartDate() {
+        HomePage homePage = new HomePage(driver);
+        homePage.enterLocation("London");
+        homePage.enterFromDate("3/22/2024");
+        homePage.enterToDate("3/21/2024");
+        homePage.enterPeople("2");
+        homePage.clickSearch();
+
+        Alert alert = driver.switchTo().alert();
+        String alertText = alert.getText();
+        Assert.assertEquals(alertText, "Trip can not end before it starts!");
         alert.accept();
     }
 
