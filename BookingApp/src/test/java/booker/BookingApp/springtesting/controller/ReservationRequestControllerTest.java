@@ -25,9 +25,9 @@ import static junit.framework.TestCase.assertEquals;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ReservationRequestControllerTest {
 
-    private String GUEST_EMAIL = "email1@gmail.com";
-    private String OWNER_EMAIL = "email2@gmail.com";
-    private String PASSWORD = "12345678";
+    private final String GUEST_EMAIL = "email1@gmail.com";
+    private final String OWNER_EMAIL = "email2@gmail.com";
+    private final String PASSWORD = "12345678";
 
     private String tokenGuest;
     private String tokenOwner;

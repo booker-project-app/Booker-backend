@@ -19,18 +19,18 @@ public interface AmenityRepository extends JpaRepository<Amenity, Long> {
     @Query("SELECT DISTINCT a FROM Amenity a WHERE a.name = ?1")
     Amenity findByName(String name);
     @Query(value="select distinct a.name from Amenity a")
-    public List<String> getDistinctNames();
+    List<String> getDistinctNames();
 
-    public List<Amenity> getAmenitiesByAccommodation_Id(Long accommodation_id);
+    List<Amenity> getAmenitiesByAccommodation_Id(Long accommodation_id);
 
     @Query(value="select distinct a from Amenity a")
-    public List<Amenity> findAllDistinct();
+    List<Amenity> findAllDistinct();
 
     @Query(value="select distinct a.name from Amenity a where :id=a.id")
-    public List<String> getNamesForAcc(@Param("id") Long id);
+    List<String> getNamesForAcc(@Param("id") Long id);
 
     @Query(value = "delete from Amenity a where :name=a.name and :id=a.accommodation")
-    public void removeAmenityFromAcc(@Param("name") String amenity, @Param("id") Long accId);
+    void removeAmenityFromAcc(@Param("name") String amenity, @Param("id") Long accId);
 
     @Transactional
     void deleteByAccommodationId(Long accommodationId);

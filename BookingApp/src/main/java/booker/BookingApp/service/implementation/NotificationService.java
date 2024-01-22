@@ -48,7 +48,6 @@ public class NotificationService implements INotificationService {
     @Override
     public void save(Notification notification) {
         repository.save(notification);
-        return;
     }
 
     public Date secondsCalculator(Date date, int seconds){

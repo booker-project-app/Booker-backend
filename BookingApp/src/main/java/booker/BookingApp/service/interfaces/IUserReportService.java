@@ -7,8 +7,8 @@ import booker.BookingApp.model.users.UserReport;
 import java.util.List;
 
 public interface IUserReportService {
-    public UserReportDTO create(CreateReportUserDTO createReportUserDTO);
-    public List<UserReportDTO> findAll();
+    UserReportDTO create(CreateReportUserDTO createReportUserDTO);
+    List<UserReportDTO> findAll();
 
     List<UserReport> getAllForUser(Long userId);
 

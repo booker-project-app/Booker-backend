@@ -57,8 +57,7 @@ public class OwnerCommentService implements IOwnerCommentService {
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
 
-            if (principal instanceof Guest) {
-                Guest user = (Guest) principal;
+            if (principal instanceof Guest user) {
                 if (ownerComment != null) {
                     ownerComment.setDeleted(true);
                     ownerCommentRepository.save(ownerComment);
@@ -88,8 +87,7 @@ public class OwnerCommentService implements IOwnerCommentService {
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
 
-            if (principal instanceof Guest) {
-                Guest user = (Guest) principal;
+            if (principal instanceof Guest user) {
                 if (reservationRepository.findAllForGuest(user.getId(), createOwnerCommentDTO.getOwnerId()).size() == 0) {
                     throw new RuntimeException("The guest has no uncancelled reservations. Commenting is not allowed.");
                 }

@@ -14,23 +14,23 @@ import java.util.List;
 
 public interface AccommodationRepository  extends JpaRepository<Accommodation, Long> {
     @Query(value="select a from Accommodation a WHERE a.address.city like %:location% and :people >= a.min_capacity and :people <= a.max_capacity and a.accepted = true")
-    public List<Accommodation> searchAccommodations(@Param("location") String location, @Param("people") int people);
+    List<Accommodation> searchAccommodations(@Param("location") String location, @Param("people") int people);
 
     @Query(value = "SELECT a FROM Accommodation a WHERE a.owner_id = :ownerId")
-    public List<Accommodation>findAllForOwner(@Param("ownerId") Long ownerId);
+    List<Accommodation>findAllForOwner(@Param("ownerId") Long ownerId);
 
     @Query(value = "SELECT a FROM Accommodation a WHERE a.owner_id = :ownerId and a.accepted = :accepted")
-    public List<Accommodation>findSpecifiedForOwner(@Param("ownerId") Long ownerId, @Param("accepted") Boolean accepted);
+    List<Accommodation>findSpecifiedForOwner(@Param("ownerId") Long ownerId, @Param("accepted") Boolean accepted);
 
     @Query(value = "DELETE FROM Accommodation WHERE owner_id = :ownerId")
-    public void deleteForOwner(@Param("ownerId") Long ownerId);
+    void deleteForOwner(@Param("ownerId") Long ownerId);
 
     @Query(value = "SELECT a FROM Accommodation a WHERE a.accepted = :accepted")
-    public List<Accommodation>findUnapproved(@Param("accepted") Boolean accepted);
+    List<Accommodation>findUnapproved(@Param("accepted") Boolean accepted);
 
     @Query(value = "SELECT a.id FROM Accommodation a WHERE a.title = :accName")
-    public Long findIdByName(@Param("accName") String accName);
+    Long findIdByName(@Param("accName") String accName);
 
     @Query(value = "SELECT a.id FROM Accommodation a")
-    public ArrayList<Long> findAllIds();
+    ArrayList<Long> findAllIds();
 }

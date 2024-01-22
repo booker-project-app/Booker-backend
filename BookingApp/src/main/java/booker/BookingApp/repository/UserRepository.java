@@ -17,32 +17,32 @@ import java.util.List;
 
 
 public interface UserRepository extends JpaRepository<User, Long> {
-    public User findByEmail(String email);
+    User findByEmail(String email);
 
-    public User findByEmailAndPassword(String email, String password);
+    User findByEmailAndPassword(String email, String password);
 
-    public User findByActivationLink(String activationLink);
+    User findByActivationLink(String activationLink);
 
     @Query(value = "SELECT g FROM Guest g WHERE g.role = 'GUEST'")
-    public List<Guest> getAllGuests();
+    List<Guest> getAllGuests();
 
     @Query(value = "SELECT o FROM Owner o WHERE o.role = 'OWNER'")
-    public List<Owner> getAllOwners();
+    List<Owner> getAllOwners();
 
     @Query(value = "SELECT u FROM User u WHERE u.id = :id")
-    public User getOne(@Param("id") Long id);
+    User getOne(@Param("id") Long id);
 
     @Query(value = "SELECT a FROM Admin a WHERE a.role = 'ADMIN'")
-    public Admin getAdmin();
+    Admin getAdmin();
 
-    public User save(User user);
+    User save(User user);
 
     @Query(value = "UPDATE User u SET u.deleted = true WHERE u.id = :id")
-    public User delete(@Param("id") Long id);
+    User delete(@Param("id") Long id);
 
     @Query(value = "SELECT count(r) from ReservationRequest r WHERE r.guestId = :guestId AND r.deleted=true")
-    public int getNumOfCancellations(@Param("guestId") Long guestId);
+    int getNumOfCancellations(@Param("guestId") Long guestId);
 
     @Query(value = "SELECT u FROM User u WHERE u.reported=true")
-    public List<User> getAllReported();
+    List<User> getAllReported();
 }

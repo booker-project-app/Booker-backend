@@ -9,7 +9,7 @@ import java.util.List;
 public interface OwnerRatingRepository extends JpaRepository<OwnerRating, Long> {
 
     @Query("select o from OwnerRating o where o.reported = true")
-    public List<OwnerRating> findAllReported();
+    List<OwnerRating> findAllReported();
     @Query("select o from OwnerRating o where o.owner.id = ?1 and o.deleted=false")
-    public List<OwnerRating> findAllForOwner(Long ownerId);
+    List<OwnerRating> findAllForOwner(Long ownerId);
 }

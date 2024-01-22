@@ -19,7 +19,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(String.format("No user found with username '%s.", username));
         } else {
-            UserDetails details = (UserDetails) user;
+            UserDetails details = user;
             return details;
         }
     }

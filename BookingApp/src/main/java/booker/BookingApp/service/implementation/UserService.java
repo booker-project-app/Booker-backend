@@ -108,20 +108,12 @@ public class UserService implements IUserService {
     @Override
     public User findByEmail(String email) {
         User user = userRepository.findByEmail(email);
-        if (user == null) {
-            return null;
-        } else {
-            return user;
-        }
+        return user;
     }
 
     @Override
     public User findByEmailAndPassword(String email, String password) {
         User user = userRepository.findByEmailAndPassword(email, password);
-
-        if (user == null) {
-            return null;
-        }
 
         return user;
     }

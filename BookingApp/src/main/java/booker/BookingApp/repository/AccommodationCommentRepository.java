@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface AccommodationCommentRepository extends JpaRepository<AccommodationComment, Long> {
     @Query("select ac from AccommodationComment ac where ac.accommodation.id = ?1 and ac.deleted=false")
-    public List<AccommodationComment> findAllForAccommodation(Long accommodationId);
+    List<AccommodationComment> findAllForAccommodation(Long accommodationId);
 
     @Query("select ac from AccommodationComment ac where ac.reported = true")
-    public List<AccommodationComment> findAllReported();
+    List<AccommodationComment> findAllReported();
 
     @Query("select ac from AccommodationComment ac where ac.accommodation.id = ?1 and ac.deleted = false and ac.approved = true")
-    public List<AccommodationComment> findAllNotDeletedForAccommodation(Long accommodationId);
+    List<AccommodationComment> findAllNotDeletedForAccommodation(Long accommodationId);
 }

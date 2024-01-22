@@ -103,8 +103,7 @@ public class AccommodationService implements IAccommodationService {
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
 
-            if (principal instanceof Owner) {
-                Owner user = (Owner) principal;
+            if (principal instanceof Owner user) {
                 accommodation.setOwner_id(user.getId());
             } else {
                 // Handle the case where the principal is not an instance of User
@@ -310,7 +309,7 @@ public class AccommodationService implements IAccommodationService {
             Iterator<AccommodationListingDTO> iterator1 = accommodations.iterator();
             while (iterator1.hasNext()) {
                 AccommodationListingDTO currentElement = iterator1.next();
-                PriceFilter price = (PriceFilter) mapper.convertValue(filter.getValue(), new TypeReference<PriceFilter>() { });
+                PriceFilter price = mapper.convertValue(filter.getValue(), new TypeReference<PriceFilter>() { });
                 if (currentElement.getTotalPrice() < price.price) {
                     iterator1.remove();
                 }
@@ -322,7 +321,7 @@ public class AccommodationService implements IAccommodationService {
             Iterator<AccommodationListingDTO> iterator = accommodations.iterator();
             while (iterator.hasNext()) {
                 AccommodationListingDTO currentElement = iterator.next();
-                PriceFilter price =(PriceFilter) mapper.convertValue(filter.getValue(), new TypeReference<PriceFilter>() { });
+                PriceFilter price = mapper.convertValue(filter.getValue(), new TypeReference<PriceFilter>() { });
                 if (currentElement.getTotalPrice() > price.price) {
                     iterator.remove();
                 }

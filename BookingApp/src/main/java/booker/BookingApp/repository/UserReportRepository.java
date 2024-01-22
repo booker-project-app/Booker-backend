@@ -10,5 +10,5 @@ import java.util.List;
 public interface UserReportRepository extends JpaRepository<UserReport, Long> {
 
     @Query(value = "SELECT r FROM UserReport r WHERE r.reportedId=:userId")
-    public List<UserReport> getAllForUser(@Param("userId") Long userId);
+    List<UserReport> getAllForUser(@Param("userId") Long userId);
 }

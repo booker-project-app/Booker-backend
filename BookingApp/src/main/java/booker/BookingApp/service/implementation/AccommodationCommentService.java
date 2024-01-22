@@ -80,8 +80,7 @@ public class AccommodationCommentService implements IAccommodationCommentService
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
 
-            if (principal instanceof User) {
-                User user = (User) principal;
+            if (principal instanceof User user) {
                 List<Reservation> reservations = reservationRepository.findAllForGuestInAccommodation(user.getId(), createAccommodationCommentDTO.getAccommodationId());
                 for (Reservation r : reservations) {
                     System.out.println(r.toString());
@@ -131,8 +130,7 @@ public class AccommodationCommentService implements IAccommodationCommentService
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
 
-            if (principal instanceof User) {
-                User user = (User) principal;
+            if (principal instanceof User user) {
                 if (accommodationComment != null) {
                     accommodationComment.setDeleted(true);
                     accommodationCommentRepository.save(accommodationComment);

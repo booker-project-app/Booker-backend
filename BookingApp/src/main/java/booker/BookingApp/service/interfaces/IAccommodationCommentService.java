@@ -7,17 +7,17 @@ import booker.BookingApp.model.accommodation.AccommodationComment;
 import java.util.List;
 
 public interface IAccommodationCommentService {
-    public AccommodationComment findOne(Long id);
-    public List<AccommodationComment> findAll();
-    public List<AccommodationComment> findAllForAccommodation(Long accommodationId);
-    public void remove(Long id);
-    public AccommodationCommentDTO create(CreateAccommodationCommentDTO accommodationCommentDTO);
-    public AccommodationCommentDTO update(AccommodationCommentDTO accommodationCommentDTO);
-    public void delete(Long id);
-    public void report(Long id);
-    public AccommodationComment save(AccommodationComment accommodationComment);
-    public List<AccommodationComment> findAllReported();
-    public List<AccommodationCommentDTO> findAllNotDeletedForAccommodation(Long accommodationId);
-    public void deleteForAdmin(Long id);
-    public void approveComment(Long id);
+    AccommodationComment findOne(Long id);
+    List<AccommodationComment> findAll();
+    List<AccommodationComment> findAllForAccommodation(Long accommodationId);
+    void remove(Long id);
+    AccommodationCommentDTO create(CreateAccommodationCommentDTO accommodationCommentDTO);
+    AccommodationCommentDTO update(AccommodationCommentDTO accommodationCommentDTO);
+    void delete(Long id);
+    void report(Long id);
+    AccommodationComment save(AccommodationComment accommodationComment);
+    List<AccommodationComment> findAllReported();
+    List<AccommodationCommentDTO> findAllNotDeletedForAccommodation(Long accommodationId);
+    void deleteForAdmin(Long id);
+    void approveComment(Long id);
 }

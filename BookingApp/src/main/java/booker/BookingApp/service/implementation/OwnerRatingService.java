@@ -49,8 +49,7 @@ public class OwnerRatingService implements IOwnerRatingService {
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
 
-            if (principal instanceof Guest) {
-                Guest user = (Guest) principal;
+            if (principal instanceof Guest user) {
 
                 rating.setDeleted(true);
                 ownerRatingRepository.save(rating);
@@ -77,8 +76,7 @@ public class OwnerRatingService implements IOwnerRatingService {
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
 
-            if (principal instanceof Guest) {
-                Guest user = (Guest) principal;
+            if (principal instanceof Guest user) {
                 List<Reservation> reservations = reservationRepository.findAllForGuest(user.getId(), createOwnerRatingDTO.getOwnerId());
                 if (reservations.size() == 0) {
                     throw new RuntimeException("The guest has no uncancelled reservations. Rating is not allowed.");

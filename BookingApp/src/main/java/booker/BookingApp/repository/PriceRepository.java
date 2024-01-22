@@ -11,16 +11,16 @@ import java.util.List;
 
 public interface PriceRepository extends JpaRepository<Price, Long> {
     @Query("select p from Price p where p.accommodation.id = ?1")
-    public List<Price> findAllForAccommodation(Long accommodationId);
+    List<Price> findAllForAccommodation(Long accommodationId);
     @Query("select p from Price p where p.type = 0")
-    public List<Price> findAllForTypeAccommodation();
+    List<Price> findAllForTypeAccommodation();
 
     @Query("select p from Price p where p.type = 1")
-    public List<Price> findAllForTypeGuest();
+    List<Price> findAllForTypeGuest();
 
     @Query("select distinct p.type from Price p where p.accommodation.id = :accId")
-    public PriceType getAccommodationPriceType(@Param("accId") Long accId);
+    PriceType getAccommodationPriceType(@Param("accId") Long accId);
 
     @Query(value="select p.cost from Accommodation a, Price p WHERE a.id=:accId AND p.accommodation.id=:accId AND :date BETWEEN p.fromDate AND p.toDate")
-    public double findPriceForDate(@Param("accId") Long accId, @Param("date") Date date);
+    double findPriceForDate(@Param("accId") Long accId, @Param("date") Date date);
 }
