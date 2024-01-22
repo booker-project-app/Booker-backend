@@ -13,10 +13,38 @@ public class HomePage {
     @FindBy(css = "input.search-button")
     private WebElement searcBtn;
 
+    @FindBy(css = "#where_input")
+    private WebElement whereInput;
+
+    @FindBy(css = "#from_date")
+    private WebElement fromDateInput;
+
+    @FindBy(css = "#to_date")
+    private WebElement toDateInput;
+
+    @FindBy(css = "#people_input")
+    private WebElement peopleInput;
+
     public HomePage(WebDriver driver) {
         this.driver = driver;
         driver.get(PAGE_URL);
         PageFactory.initElements(driver, this);
+    }
+
+    public void enterLocation(String location) {
+        whereInput.sendKeys(location);
+    }
+
+    public void enterFromDate(String date) {
+        fromDateInput.sendKeys(date);
+    }
+
+    public void enterToDate(String date) {
+        toDateInput.sendKeys(date);
+    }
+
+    public void enterPeople(String people) {
+        peopleInput.sendKeys(people);
     }
 
     public void clickSearch() {
