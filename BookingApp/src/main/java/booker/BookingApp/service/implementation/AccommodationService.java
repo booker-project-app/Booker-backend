@@ -1,10 +1,12 @@
 package booker.BookingApp.service.implementation;
 
 import booker.BookingApp.dto.accommodation.*;
+import booker.BookingApp.dto.requestsAndReservations.ReservationRequestDTO;
 import booker.BookingApp.enums.AccommodationType;
 import booker.BookingApp.enums.PriceType;
 import booker.BookingApp.model.accommodation.*;
 import booker.BookingApp.model.requestsAndReservations.Reservation;
+import booker.BookingApp.model.requestsAndReservations.ReservationRequest;
 import booker.BookingApp.model.users.Owner;
 import booker.BookingApp.repository.*;
 import booker.BookingApp.service.interfaces.IAccommodationService;
@@ -39,6 +41,9 @@ public class AccommodationService implements IAccommodationService {
 
     @Autowired
     AccommodationRepository repository;
+
+    @Autowired
+    ReservationRequestRepository requestRepository;
 
     @Autowired
 
@@ -367,6 +372,16 @@ public class AccommodationService implements IAccommodationService {
     @Override
     public PriceType getAccommodationPriceType(Long accommodationId) {
         return priceService.getAccommodationPriceType(accommodationId);
+    }
+
+    @Override
+    public ArrayList<ReservationRequestDTO> findAccommodationRequests(Long accommodationId){
+        ArrayList<ReservationRequestDTO> requestDTOS = new ArrayList<>();
+        List<ReservationRequest> requests = requestRepository.findAllForAccommodation(accommodationId);
+        for (ReservationRequest r : requests) {
+            requestDTOS.add(ReservationRequestDTO.makeFromRequest(r));
+        }
+        return requestDTOS;
     }
 
     @Override

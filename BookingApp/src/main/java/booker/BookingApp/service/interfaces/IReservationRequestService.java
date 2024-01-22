@@ -18,8 +18,6 @@ public interface IReservationRequestService {
 
     ArrayList<ReservationRequestDTO> findOwnersRequests(Long ownerId);
 
-    ArrayList<ReservationRequestDTO> findAccommodationRequests(Long accommodationId);
-
     ArrayList<ReservationRequestDTO> search(Long guestId, String dateString, String name) throws IOException;
 
     ArrayList<ReservationRequestDTO> searchForOwner(Long ownerId, String dateString, String name) throws IOException;

@@ -141,16 +141,6 @@ public class ReservationRequestService implements IReservationRequestService {
     }
 
     @Override
-    public ArrayList<ReservationRequestDTO> findAccommodationRequests(Long accommodationId){
-        ArrayList<ReservationRequestDTO> requestDTOS = new ArrayList<>();
-        List<ReservationRequest> requests = repository.findAllForAccommodation(accommodationId);
-        for (ReservationRequest r : requests) {
-            requestDTOS.add(ReservationRequestDTO.makeFromRequest(r));
-        }
-        return requestDTOS;
-    }
-
-    @Override
     public ArrayList<ReservationRequestDTO> search(Long guestId, String dateString, String name) throws IOException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date;
@@ -298,7 +288,7 @@ public class ReservationRequestService implements IReservationRequestService {
     @Override
     public void declineOthers(ReservationRequestDTO acceptedRequest) {
         try {
-            ArrayList<ReservationRequestDTO> all = findAccommodationRequests(acceptedRequest.getAccommodationId());
+            ArrayList<ReservationRequestDTO> all = accommodationService.findAccommodationRequests(acceptedRequest.getAccommodationId());
             for (ReservationRequestDTO requestDTO : all){
                 // if request is not accepted and request and accepted have overlap
                 if (!requestDTO.equals(acceptedRequest) && availabilityService.checkForOverlaps(requestDTO, acceptedRequest)){

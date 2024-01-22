@@ -166,4 +166,79 @@ public class ReservationRequestControllerTest {
         assertEquals(requestDTO, request);
     }
 
+
+    @Test
+    @DisplayName("should return 401, owner not authorized for accepting request")
+    public void TestOwnerAcceptOrDeclineRequest_ShouldReturnNotAuthorized() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + tokenOwner);
+        HttpEntity<Object> httpEntity = new HttpEntity<Object>(null, headers);
+
+        ResponseEntity<String> responseEntity =
+                restTemplate.exchange("/api/requests/owner/accept_reservation/{accept}", HttpMethod.PUT,
+                        httpEntity, String.class, true);
+
+        assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("should return bad request, accommodation not available")
+    public void TestOwnerAcceptRequest_AccommodationNotAvailable() {
+        ReservationRequestDTO requestDTO = new ReservationRequestDTO(1L, 1L,
+                1L, "2025-03-25", "2025-03-28", 2,
+                ReservationRequestStatus.WAITING, false, 270);
+        String expectedResponse = "Error with accommodation availability for this request!";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + tokenOwner);
+        HttpEntity<Object> httpEntity = new HttpEntity<Object>(requestDTO, headers);
+
+        ResponseEntity<String> responseEntity =
+                restTemplate.exchange("/api/requests/owner/accept_reservation/{accept}", HttpMethod.PUT,
+                        httpEntity, String.class, true);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        String response = responseEntity.getBody();
+        assertEquals(expectedResponse, response);
+    }
+
+    @Test
+    @DisplayName("should return OK, approve request and created reservation")
+    public void TestOwnerAcceptRequest_Success() {
+        ReservationRequestDTO requestDTO = new ReservationRequestDTO(1L, 1L,
+                1L, "2024-03-25", "2024-03-28", 2,
+                ReservationRequestStatus.WAITING, false, 270);
+        String expectedResponse = "Reservation request is approved!\nReservation created!";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + tokenOwner);
+        HttpEntity<Object> httpEntity = new HttpEntity<Object>(requestDTO, headers);
+
+        ResponseEntity<String> responseEntity =
+                restTemplate.exchange("/api/requests/owner/accept_reservation/{accept}", HttpMethod.PUT,
+                        httpEntity, String.class, true);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        String response = responseEntity.getBody();
+        assertEquals(expectedResponse, response);
+    }
+
+    @Test
+    @DisplayName("should return OK, denied request")
+    public void TestOwnerDeclineRequest_Success() {
+        ReservationRequestDTO requestDTO = new ReservationRequestDTO(1L, 1L,
+                1L, "2024-03-25", "2024-03-28", 2,
+                ReservationRequestStatus.WAITING, false, 270);
+        String expectedResponse = "Reservation request is denied!";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + tokenOwner);
+        HttpEntity<Object> httpEntity = new HttpEntity<Object>(requestDTO, headers);
+
+        ResponseEntity<String> responseEntity =
+                restTemplate.exchange("/api/requests/owner/accept_reservation/{accept}", HttpMethod.PUT,
+                        httpEntity, String.class, false);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        String response = responseEntity.getBody();
+        assertEquals(expectedResponse, response);
+    }
+
 }

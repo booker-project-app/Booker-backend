@@ -175,6 +175,6 @@ public class ReservationRequestController {
                 return new ResponseEntity<>("Reservation request is denied!", HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>("Error with accommodation availability for this request!", HttpStatus.OK);
+        return new ResponseEntity<>("Error with accommodation availability for this request!", HttpStatus.BAD_REQUEST);
     }
 }
