@@ -5,10 +5,11 @@ import booker.BookingApp.model.accommodation.Availability;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
-
+@Repository
 public interface AvailabilityRepository extends JpaRepository<Availability, Long> {
     @Query(value = "SELECT a from Availability AS a WHERE a.accommodation.id=:accommodationId AND :startDate >= a.startDate AND :startDate <=a.endDate AND :endDate >=a.startDate AND :endDate <=a.endDate")
     List<Availability> checkForDateRange(

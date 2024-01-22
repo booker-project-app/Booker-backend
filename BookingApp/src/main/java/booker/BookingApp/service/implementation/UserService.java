@@ -53,7 +53,7 @@ public class UserService implements IUserService {
 
     @Override
     public User findOne(Long id){
-        return userRepository.findById(id).orElseGet(null);
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override

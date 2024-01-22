@@ -22,7 +22,7 @@ public class UpdateAvailabilityDTO {
     public Date endDate;
     @NotNull
     public CreatePriceDTO price;
-    @Min(1)
+    @Min(0)
     public int deadline;
 
     public UpdateAvailabilityDTO() {

@@ -31,9 +31,9 @@ public class AccommodationUpdatedAvailabilityDTO {
             availabilityDTOS.add(new AvailabilityDTO(a.getStartDate(), a.getEndDate()));
         }
         return new AccommodationUpdatedAvailabilityDTO(accommodation.getId(),
-                availabilityDTOS,
-                accommodation.getPrices(),
-                accommodation.getDeadline());
+                                        availabilityDTOS,
+                                        accommodation.getPrices(),
+                                        accommodation.getDeadline());
     }
 
 

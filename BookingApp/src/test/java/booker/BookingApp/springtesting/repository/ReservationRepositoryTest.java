@@ -78,11 +78,11 @@ public class ReservationRepositoryTest {
     @Test
     @DisplayName("should not find reservations for guest and owner because guest doesn't exist")
     public void shouldNotFindReservationsForGuest_GuestNotExist() {
-        Long nonExistingGuest = 999L;
+       Long nonExistingGuest = 999L;
 
-        List<Reservation> result = reservationRepository.findAllForGuest(nonExistingGuest, 2L);
+       List<Reservation> result = reservationRepository.findAllForGuest(nonExistingGuest, 2L);
 
-        assertThat(result).isNotNull().isEmpty();
+       assertThat(result).isNotNull().isEmpty();
 
     }
 
@@ -263,7 +263,7 @@ public class ReservationRepositoryTest {
     @DisplayName("should not find last past reservation for non-existing accommodation")
     public void shouldNotFindLastPastReservationForGuestInAccommodationForNonExistingAccommodation() {
         Long guestId = 1L;
-        Long accommodationId = 123L;
+        Long accommodationId = 999L;
 
         Reservation reservation = reservationRepository.findLastPastReservationForGuestInAccommodation(guestId, accommodationId);
 

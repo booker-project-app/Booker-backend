@@ -236,14 +236,13 @@ public class AccommodationController {
     }
 
     //@PreAuthorize("hasAuthority('OWNER')")
-    @PostMapping(value = "/update_availability/{id}", consumes = "application/json")
-    public ResponseEntity<AccommodationViewDTO> updateAvailability(@PathVariable Long id, @Valid @RequestBody UpdateAvailabilityDTO updateAvailabilityDTO) throws Exception {
-        Accommodation accommodation = service.updateAvailability(id, updateAvailabilityDTO);
+    @PostMapping(value = "/update_availability/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<AccommodationUpdatedAvailabilityDTO> updateAvailability(@PathVariable Long id, @Valid @RequestBody UpdateAvailabilityDTO updateAvailabilityDTO) throws Exception {
+        AccommodationUpdatedAvailabilityDTO accommodation = service.updateAvailability(id, updateAvailabilityDTO);
         if (accommodation == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        AccommodationViewDTO dto = makeFromAccommodation(accommodation);
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        return new ResponseEntity<>(accommodation, HttpStatus.OK);
     }
     @DeleteMapping(value = "/{accommodationId}/remove_image/{imageId}")
     public ResponseEntity<Void> removeFromImages(@PathVariable("accommodationId") Long accommodationId,

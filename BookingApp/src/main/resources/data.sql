@@ -17,8 +17,8 @@ VALUES ('Admin', 'Admin', 'admin123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw
 INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp, notification_enabled, request_notification_enabled, cancellation_notification_enabled, rating_notification_enabled, acc_notification_enabled)
 VALUES ('Mika', 'Mikic', 'mika123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Mikina adresa', '3210089', 'OWNER', false, false, false, null, 'activation_link6', true, false, null, false, true, true, true, true);
 
-INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
-VALUES ('Nikola', 'Nikolic', 'nikola123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Mikina adresa', '3210089', 'GUEST', false, false, false, null, 'activation_link6', true, false, null);
+-- INSERT INTO users (name, surname, email, password, address, phone, role, reported, blocked, deleted, favourite_accommodations, activation_link, activated, activation_expired, activation_timestamp)
+-- VALUES ('Nikola', 'Nikolic', 'nikola123@gmail.com', '$2a$12$Mn1xmYaoG3YjZ1NsPRwV0eDw5wwGbmkhBSooynq8gldJluzqybXP.', 'Mikina adresa', '3210089', 'GUEST', false, false, false, null, 'activation_link6', true, false, null);
 
 
 
@@ -317,7 +317,7 @@ VALUES
     (1, 1, '2024-02-10', '2024-02-15', 1, 'ACCEPTED', 'CANCELED', false, 120.0, '2024-02-15 15:15:00'),
     (3, 3, '2024-03-20', '2024-03-25', 4, 'DENIED', 'ACCEPTED', false, 200.0, '2024-03-25 17:45:00'),
     (4, 4, '2024-03-20', '2024-03-25', 4, 'ACCEPTED', 'CANCELED', false, 200.0, '2024-03-25 16:30:00'),
-    (1, 1, '2024-01-15', '2024-01-17', 4, 'ACCEPTED', 'ACCEPTED', false, 200.0, '2024-01-17 12:12:00');
+    (1, 1, '2024-01-15', '2024-01-19', 4, 'ACCEPTED', 'ACCEPTED', false, 200.0, '2024-01-19 14:55:00');
 
 
 INSERT INTO RESERVATION_REQUEST (guest_id, accommodation_id, from_date, to_date, number_of_guests, status, deleted, price)

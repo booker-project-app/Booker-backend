@@ -1,14 +1,15 @@
 package booker.BookingApp.model.users;
 
+import booker.BookingApp.enums.Role;
 import booker.BookingApp.model.commentsAndRatings.OwnerComment;
 import booker.BookingApp.model.commentsAndRatings.OwnerRating;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)

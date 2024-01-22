@@ -7,13 +7,20 @@ import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
 public @Data class CreatePriceDTO {
+    @Min(0)
     private double cost;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @FutureOrPresent
     private Date fromDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @FutureOrPresent
     private Date toDate;
+    @NotNull
     private PriceType type;
 
     public CreatePriceDTO() {

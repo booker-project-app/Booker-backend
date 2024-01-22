@@ -5,10 +5,12 @@ import booker.BookingApp.model.accommodation.Price;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
 
+@Repository
 public interface PriceRepository extends JpaRepository<Price, Long> {
     @Query("select p from Price p where p.accommodation.id = ?1")
     public List<Price> findAllForAccommodation(Long accommodationId);

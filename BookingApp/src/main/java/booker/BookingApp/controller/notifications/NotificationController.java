@@ -10,16 +10,18 @@ import booker.BookingApp.service.implementation.NotificationService;
 import booker.BookingApp.service.implementation.OwnerService;
 import booker.BookingApp.service.implementation.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/notifications")
 @CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/api/notifications")
 public class NotificationController {
     @Autowired
     NotificationService notificationService;
